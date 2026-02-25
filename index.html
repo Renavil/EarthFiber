@@ -21,6 +21,10 @@
           <button class="route-link" data-route="marketplace">Marketplace</button>
           <button class="route-link" data-route="contacto">Contacto B2B</button>
         </div>
+        <div class="nav-auth">
+          <span id="sessionBadge" class="session-badge" hidden></span>
+          <button class="btn btn-primary btn-login" id="openLoginModal">Iniciar sesión</button>
+        </div>
       </nav>
     </header>
 
@@ -43,16 +47,16 @@
 
         <section class="block intro-cards">
           <article>
-            <h3>Cómo funciona</h3>
-            <p>Descubre productos, conoce su historia y compra con propósito.</p>
+            <h3>Compra con propósito</h3>
+            <p>Descubre productos con historia real y calidad artesanal.</p>
           </article>
           <article>
-            <h3>Para compradores</h3>
-            <p>Diseño auténtico, calidad artesanal y transparencia de origen.</p>
+            <h3>Vende como artesano/a</h3>
+            <p>Crea tu cuenta de vendedor, publica productos y recibe contactos mayoristas.</p>
           </article>
           <article>
-            <h3>Para artesanos</h3>
-            <p>Visibilidad, ventas digitales, donaciones y contacto comercial.</p>
+            <h3>Apoya metas reales</h3>
+            <p>Contribuye a donaciones transparentes que impulsan el crecimiento familiar.</p>
           </article>
         </section>
       </section>
@@ -61,53 +65,34 @@
         <section class="block">
           <div class="section-head">
             <h2>Marketplace / Tienda</h2>
-            <p>Haz clic en un producto para ver su detalle completo.</p>
+            <p>Haz clic en cualquier producto para ver su detalle completo.</p>
           </div>
           <div class="market-layout">
             <aside class="filters">
               <h3>Filtros</h3>
               <label>Tipo de producto
-                <select><option>Todos</option><option>Blusas</option><option>Vestidos</option><option>Bolsos</option></select>
+                <select>
+                  <option>Todos</option>
+                  <option>Blusas</option>
+                  <option>Vestidos</option>
+                  <option>Bolsos</option>
+                  <option>Bufandas</option>
+                </select>
               </label>
               <label>Rango de precio
                 <input type="range" min="30" max="600" value="220" />
               </label>
               <label>Color
-                <select><option>Todos</option><option>Tierra</option><option>Marfil</option><option>Negro</option></select>
+                <select>
+                  <option>Todos</option>
+                  <option>Tierra</option>
+                  <option>Marfil</option>
+                  <option>Negro</option>
+                </select>
               </label>
             </aside>
 
-            <div class="product-grid" id="productGrid">
-              <article class="product-card" data-product-id="misti">
-                <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=900&q=80" alt="Blusa Misti" />
-                <div class="product-info">
-                  <h4>Blusa Misti</h4>
-                  <p>S/ 189 · Laura Quispe</p>
-                  <small>⭐ 4.8 · Blusa</small>
-                  <button class="btn btn-primary product-btn" data-product-id="misti">Ver detalle</button>
-                </div>
-              </article>
-
-              <article class="product-card" data-product-id="sumaq">
-                <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80" alt="Vestido Sumaq" />
-                <div class="product-info">
-                  <h4>Vestido Sumaq</h4>
-                  <p>S/ 290 · Ana Huamán</p>
-                  <small>⭐ 4.9 · Vestido</small>
-                  <button class="btn btn-primary product-btn" data-product-id="sumaq">Ver detalle</button>
-                </div>
-              </article>
-
-              <article class="product-card" data-product-id="qori">
-                <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=900&q=80" alt="Bolso Qori" />
-                <div class="product-info">
-                  <h4>Bolso Qori</h4>
-                  <p>S/ 145 · Luis Mamani</p>
-                  <small>⭐ 4.7 · Bolso</small>
-                  <button class="btn btn-primary product-btn" data-product-id="qori">Ver detalle</button>
-                </div>
-              </article>
-            </div>
+            <div class="product-grid" id="productGrid"></div>
           </div>
         </section>
       </section>
@@ -115,8 +100,8 @@
       <section id="view-product" class="view">
         <section class="block">
           <div class="section-head">
-            <h2 id="detailTitle">Detalle del producto</h2>
-            <p>Galería + compra + historia + proceso artesanal.</p>
+            <h2>Detalle del producto</h2>
+            <p>Galería + compra + historia + videos de proceso artesanal.</p>
           </div>
 
           <div class="detail-layout">
@@ -137,14 +122,22 @@
             </div>
           </div>
 
-          <article class="narrative" id="historiaSection">
+          <article class="narrative">
             <h3>Historia del artesano/a</h3>
             <p id="storyText"></p>
             <h4>Proceso de fabricación</h4>
             <p id="processText"></p>
-            <video id="storyVideo" controls muted loop playsinline preload="metadata" poster="https://images.unsplash.com/photo-1617957743098-63f8e9a2735f?auto=format&fit=crop&w=1200&q=80">
-              <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
-            </video>
+
+            <div class="video-grid">
+              <figure>
+                <figcaption>Video: Historia del artesano</figcaption>
+                <video id="storyVideo" class="auto-video" controls muted loop playsinline preload="metadata"></video>
+              </figure>
+              <figure>
+                <figcaption>Video: Proceso de fabricación</figcaption>
+                <video id="processVideo" class="auto-video" controls muted loop playsinline preload="metadata"></video>
+              </figure>
+            </div>
           </article>
         </section>
       </section>
@@ -153,14 +146,20 @@
         <section class="block">
           <div class="section-head">
             <h2>Perfil del artesano/a</h2>
-            <p>Historia, catálogo, compras mayoristas y metas de donación.</p>
+            <p>Historia, logros, catálogo funcional, compras mayoristas y metas de donación.</p>
           </div>
 
-          <div class="profile-card">
-            <img id="artisanImage" src="https://images.unsplash.com/photo-1542204625-de293a42d5f3?auto=format&fit=crop&w=900&q=80" alt="Perfil artesana" />
+          <div class="profile-card enhanced">
+            <img id="artisanImage" src="" alt="Perfil artesano" />
             <div>
-              <h3 id="artisanName">Laura Quispe · Cusco</h3>
+              <h3 id="artisanName"></h3>
               <p id="artisanBio"></p>
+              <div class="artisan-meta">
+                <div><strong id="artisanExp"></strong><span>Experiencia</span></div>
+                <div><strong id="artisanOrigin"></strong><span>Origen</span></div>
+                <div><strong id="artisanTechnique"></strong><span>Técnica principal</span></div>
+                <div><strong id="artisanRating"></strong><span>Valoración</span></div>
+              </div>
               <div class="hero-actions">
                 <button class="btn btn-outline route-link" data-route="contacto">Cotizar pedido para empresa</button>
                 <button class="btn btn-primary route-link" data-route="marketplace">Volver a tienda</button>
@@ -168,12 +167,8 @@
             </div>
           </div>
 
-          <div class="carousel">
-            <article class="mini-card"><h4>Bufanda Kintu</h4><p>S/ 120</p></article>
-            <article class="mini-card"><h4>Blusa Misti</h4><p>S/ 189</p></article>
-            <article class="mini-card"><h4>Bolso Qori</h4><p>S/ 145</p></article>
-            <article class="mini-card"><h4>Vestido Sumaq</h4><p>S/ 290</p></article>
-          </div>
+          <h3 class="subheading">Productos de este artesano/a</h3>
+          <div class="carousel" id="artisanProducts"></div>
 
           <article class="panel donation-panel">
             <h3>Módulo de donaciones</h3>
@@ -210,9 +205,33 @@
     </main>
 
     <button class="floating-artisan" id="floatingArtisan" type="button">
-      <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=160&q=80" alt="Artesana" />
-      <span id="floatingText">Contactar artesano</span>
+      <img id="floatingImage" src="" alt="Artesano" />
+      <span id="floatingText">Ver perfil del artesano</span>
     </button>
+
+    <div class="modal-backdrop" id="loginModal" hidden>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+        <h3 id="loginTitle">Iniciar sesión</h3>
+        <p>Elige cómo deseas ingresar a Earth Fiber.</p>
+        <label>Tipo de cuenta
+          <select id="loginRole">
+            <option value="cliente">Cliente</option>
+            <option value="artesano">Artesano/a vendedor</option>
+          </select>
+        </label>
+        <label>Correo
+          <input id="loginEmail" type="email" placeholder="correo@ejemplo.com" />
+        </label>
+        <label>Contraseña
+          <input id="loginPassword" type="password" placeholder="••••••••" />
+        </label>
+        <div class="modal-actions">
+          <button class="btn btn-outline" id="closeLoginModal" type="button">Cancelar</button>
+          <button class="btn btn-primary" id="submitLogin" type="button">Ingresar</button>
+        </div>
+        <p class="login-note">Demo de prueba: muestra sesión activa y rol (cliente o vendedor).</p>
+      </div>
+    </div>
 
     <footer>
       <p>Earth Fiber © 2026 · Elegancia que preserva cultura.</p>
