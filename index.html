@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Earth Fiber | Moda con propósito</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero" id="inicio">
+      <nav class="top-nav">
+        <div class="brand">Earth Fiber</div>
+        <div class="nav-links">
+          <a href="#marketplace">Tienda</a>
+          <a href="#producto">Producto</a>
+          <a href="#artesanos">Artesanos</a>
+          <a href="#contacto">Contacto</a>
+        </div>
+      </nav>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <span class="tag">Moda artesanal peruana</span>
+        <h1>No solo vistes una prenda. Vistes una historia.</h1>
+        <p>
+          Descubre piezas de algodón nativo hechas por artesanas y artesanos peruanos.
+          Cada compra impulsa cultura, ingresos justos y oportunidades reales.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#marketplace">Explorar tienda</a>
+          <a class="btn btn-outline" href="#artesanos">Conocer artesanos</a>
+          <a class="btn btn-ghost" href="#membresias">Vender en Earth Fiber</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="section intro" id="que-es">
+        <h2>¿Qué es Earth Fiber?</h2>
+        <p>
+          Earth Fiber es un marketplace profesional que conecta artesanas/os con clientes
+          finales y empresas. Combinamos diseño, tradición e impacto social para que cada
+          producto tenga valor estético y humano.
+        </p>
+        <div class="grid-3">
+          <article>
+            <h3>Cómo funciona</h3>
+            <p>Compra piezas únicas, conoce la historia detrás de cada creación y apoya metas reales.</p>
+          </article>
+          <article>
+            <h3>Beneficios para compradores</h3>
+            <p>Autenticidad, calidad artesanal, trazabilidad del proceso y conexión cultural.</p>
+          </article>
+          <article>
+            <h3>Beneficios para artesanos</h3>
+            <p>Mayor visibilidad, canal de venta digital, contactos comerciales y apoyo comunitario.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section marketplace" id="marketplace">
+        <div class="section-head">
+          <h2>Marketplace / Tienda</h2>
+          <p>Explora productos por categoría, precio, talla y valoración.</p>
+        </div>
+        <div class="market-layout">
+          <aside class="filters">
+            <h3>Filtros</h3>
+            <label>Tipo de producto
+              <select>
+                <option>Todos</option>
+                <option>Blusas</option>
+                <option>Vestidos</option>
+                <option>Bolsos</option>
+                <option>Bufandas</option>
+              </select>
+            </label>
+            <label>Rango de precio
+              <input type="range" min="30" max="600" value="220" />
+            </label>
+            <label>Talla
+              <select><option>Todas</option><option>S</option><option>M</option><option>L</option></select>
+            </label>
+            <label>Color
+              <select><option>Todos</option><option>Tierra</option><option>Marfil</option><option>Negro</option></select>
+            </label>
+            <label>Ordenar por
+              <select>
+                <option>Más recientes</option>
+                <option>Menor precio</option>
+                <option>Mayor precio</option>
+                <option>Mejor valorados</option>
+              </select>
+            </label>
+          </aside>
+          <div class="product-grid">
+            <article class="product-card">
+              <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=900&q=80" alt="Blusa artesanal" />
+              <div class="product-info">
+                <h4>Blusa Misti</h4>
+                <p>S/ 189 · Laura Quispe</p>
+                <small>⭐ 4.8 · Blusa</small>
+              </div>
+            </article>
+            <article class="product-card">
+              <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80" alt="Vestido artesanal" />
+              <div class="product-info">
+                <h4>Vestido Sumaq</h4>
+                <p>S/ 290 · Ana Huamán</p>
+                <small>⭐ 4.9 · Vestido</small>
+              </div>
+            </article>
+            <article class="product-card">
+              <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=900&q=80" alt="Bolso de algodón" />
+              <div class="product-info">
+                <h4>Bolso Qori</h4>
+                <p>S/ 145 · Luis Mamani</p>
+                <small>⭐ 4.7 · Bolso</small>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section product-detail" id="producto">
+        <div class="section-head">
+          <h2>Detalle del producto</h2>
+          <p>Galería, compra rápida y narrativa de origen en una sola experiencia.</p>
+        </div>
+        <div class="detail-layout">
+          <img class="detail-main-image" src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1400&q=80" alt="Producto principal" />
+          <div class="detail-info">
+            <h3>Bufanda Kintu</h3>
+            <p class="price">S/ 120</p>
+            <p>Tejida con algodón nativo de color natural. Acabado premium y suave al tacto.</p>
+            <ul>
+              <li>Tallas: Única</li>
+              <li>Stock: 12 unidades</li>
+              <li>Artesana: Laura Quispe (Cusco)</li>
+            </ul>
+            <div class="hero-actions">
+              <button class="btn btn-primary">Comprar</button>
+              <button class="btn btn-outline">Agregar al carrito</button>
+            </div>
+          </div>
+        </div>
+
+        <button class="story-float" id="storyFloat" aria-label="Ir a historia">
+          <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80" alt="Artesana Laura" />
+          <span>Conoce la historia de Laura</span>
+        </button>
+
+        <article class="narrative" id="historia">
+          <h3>Historia del artesano/a</h3>
+          <p>
+            Laura Quispe aprendió a hilar de su madre en Chinchero. Hoy transforma algodón nativo
+            en piezas contemporáneas sin perder técnicas ancestrales.
+          </p>
+          <h4>Proceso de fabricación</h4>
+          <p>
+            Desde el hilado manual hasta el teñido natural, cada paso se realiza en comunidad
+            para preservar conocimiento local.
+          </p>
+          <video
+            id="storyVideo"
+            controls
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            poster="https://images.unsplash.com/photo-1617957743098-63f8e9a2735f?auto=format&fit=crop&w=1200&q=80"
+          >
+            <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
+          </video>
+        </article>
+      </section>
+
+      <section class="section artisan-profile" id="artesanos">
+        <div class="section-head">
+          <h2>Perfil del artesano/a</h2>
+          <p>Historia, catálogo, compras al por mayor y metas de donación.</p>
+        </div>
+        <div class="profile-card">
+          <img src="https://images.unsplash.com/photo-1542204625-de293a42d5f3?auto=format&fit=crop&w=900&q=80" alt="Perfil artesana" />
+          <div>
+            <h3>Laura Quispe · Cusco</h3>
+            <p>
+              14 años de experiencia en tejido y bordado con algodón nativo. Especialista en
+              piezas de uso diario con identidad andina.
+            </p>
+            <div class="hero-actions">
+              <button class="btn btn-outline">Solicitar información para compra mayorista</button>
+              <button class="btn btn-ghost">Ver más productos</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="carousel" aria-label="Productos de la artesana">
+          <article class="mini-card"><h4>Bufanda Kintu</h4><p>S/ 120</p></article>
+          <article class="mini-card"><h4>Blusa Misti</h4><p>S/ 189</p></article>
+          <article class="mini-card"><h4>Bolso Qori</h4><p>S/ 145</p></article>
+          <article class="mini-card"><h4>Chalina Inti</h4><p>S/ 110</p></article>
+        </div>
+      </section>
+
+      <section class="section dual" id="compra-donacion">
+        <article class="panel">
+          <h3>Carrito y checkout</h3>
+          <ul>
+            <li>Editar cantidades y ver subtotal.</li>
+            <li>Pagos con tarjeta y Yape.</li>
+            <li>Selección de envío y dirección.</li>
+          </ul>
+        </article>
+        <article class="panel" id="donaciones">
+          <h3>Módulo de donaciones con metas</h3>
+          <p><strong>Luis necesita S/ 150</strong> para comprar una laptop para su hija.</p>
+          <div class="progress-wrap" aria-label="Progreso de donación">
+            <div class="progress-bar" id="progressBar" style="width: 62%;"></div>
+          </div>
+          <p class="progress-text">S/ 93 recaudados de S/ 150</p>
+          <div class="hero-actions">
+            <button class="btn btn-outline">Donar S/ 5</button>
+            <button class="btn btn-outline">Donar S/ 10</button>
+            <button class="btn btn-primary">Otro monto</button>
+          </div>
+        </article>
+      </section>
+
+      <section class="section memberships" id="membresias">
+        <div class="section-head">
+          <h2>Membresías para artesanos</h2>
+          <p>Empieza gratis y escala con soporte prioritario.</p>
+        </div>
+        <div class="grid-2">
+          <article class="plan">
+            <h3>Plan Free</h3>
+            <p>Perfil estándar, catálogo limitado y reporte mensual.</p>
+          </article>
+          <article class="plan highlighted">
+            <h3>Plan Pro — S/ 5 al mes</h3>
+            <p>Mayor límite de productos, soporte prioritario y ayuda operativa.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section contact" id="contacto">
+        <div class="section-head">
+          <h2>Contacto general y B2B</h2>
+          <p>Solicita cotizaciones empresariales y recibe atención personalizada.</p>
+        </div>
+        <form class="contact-form">
+          <input type="text" placeholder="Nombre de empresa" />
+          <input type="text" placeholder="RUC" />
+          <input type="text" placeholder="Persona de contacto" />
+          <input type="email" placeholder="Correo" />
+          <input type="text" placeholder="Producto(s) de interés" />
+          <input type="number" placeholder="Cantidad estimada" />
+          <textarea rows="4" placeholder="Fecha requerida y detalles adicionales"></textarea>
+          <button class="btn btn-primary" type="button">Enviar solicitud comercial</button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>Earth Fiber © 2026 · Elegancia que preserva cultura.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
