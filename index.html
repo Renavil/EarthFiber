@@ -211,24 +211,55 @@
 
     <div class="modal-backdrop" id="loginModal" hidden>
       <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-        <h3 id="loginTitle">Iniciar sesión</h3>
-        <p>Elige cómo deseas ingresar a Earth Fiber.</p>
-        <label>Tipo de cuenta
-          <select id="loginRole">
-            <option value="cliente">Cliente</option>
-            <option value="artesano">Artesano/a vendedor</option>
-          </select>
-        </label>
-        <label>Correo
-          <input id="loginEmail" type="email" placeholder="correo@ejemplo.com" />
-        </label>
-        <label>Contraseña
-          <input id="loginPassword" type="password" placeholder="••••••••" />
-        </label>
-        <div class="modal-actions">
-          <button class="btn btn-outline" id="closeLoginModal" type="button">Cancelar</button>
-          <button class="btn btn-primary" id="submitLogin" type="button">Iniciar sesión</button>
+        <h3 id="loginTitle">Acceso a Earth Fiber</h3>
+        <p>Inicia sesión o crea una cuenta para continuar.</p>
+
+        <div class="auth-tabs" role="tablist" aria-label="Opciones de autenticación">
+          <button class="auth-tab active" id="tabLogin" type="button">Iniciar sesión</button>
+          <button class="auth-tab" id="tabRegister" type="button">Crear cuenta</button>
         </div>
+
+        <div id="loginPanel">
+          <label>Tipo de cuenta
+            <select id="loginRole">
+              <option value="cliente">Cliente</option>
+              <option value="artesano">Artesano/a vendedor</option>
+            </select>
+          </label>
+          <label>Correo
+            <input id="loginEmail" type="email" placeholder="correo@ejemplo.com" />
+          </label>
+          <label>Contraseña
+            <input id="loginPassword" type="password" placeholder="••••••••" />
+          </label>
+          <div class="modal-actions">
+            <button class="btn btn-outline" id="closeLoginModal" type="button">Cancelar</button>
+            <button class="btn btn-primary" id="submitLogin" type="button">Iniciar sesión</button>
+          </div>
+        </div>
+
+        <div id="registerPanel" hidden>
+          <label>Tipo de cuenta
+            <select id="registerRole">
+              <option value="cliente">Cliente</option>
+              <option value="artesano">Artesano/a vendedor</option>
+            </select>
+          </label>
+          <label>Nombre completo
+            <input id="registerName" type="text" placeholder="Nombre y apellidos" />
+          </label>
+          <label>Correo
+            <input id="registerEmail" type="email" placeholder="correo@ejemplo.com" />
+          </label>
+          <label>Contraseña
+            <input id="registerPassword" type="password" placeholder="Mínimo 8 caracteres" />
+          </label>
+          <div class="modal-actions">
+            <button class="btn btn-outline" id="closeRegisterModal" type="button">Cancelar</button>
+            <button class="btn btn-primary" id="submitRegister" type="button">Crear cuenta</button>
+          </div>
+        </div>
+
         <p class="login-feedback" id="loginFeedback" hidden></p>
         <p class="login-note">Demo de prueba: muestra sesión activa y rol (cliente o vendedor).</p>
       </div>

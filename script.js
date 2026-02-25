@@ -191,6 +191,12 @@ const submitLogin = document.getElementById("submitLogin");
 const loginRole = document.getElementById("loginRole");
 const sessionBadge = document.getElementById("sessionBadge");
 const loginFeedback = document.getElementById("loginFeedback");
+const tabLogin = document.getElementById("tabLogin");
+const tabRegister = document.getElementById("tabRegister");
+const loginPanel = document.getElementById("loginPanel");
+const registerPanel = document.getElementById("registerPanel");
+const closeRegisterModal = document.getElementById("closeRegisterModal");
+const submitRegister = document.getElementById("submitRegister");
 
 let currentProductId = "qori";
 let videoObserver;
@@ -333,14 +339,28 @@ function openModal() {
   loginModal.hidden = false;
   loginFeedback.hidden = true;
   loginFeedback.textContent = "";
+  setAuthTab("login");
 }
 
 function closeModal() {
   loginModal.hidden = true;
 }
 
+function setAuthTab(mode) {
+  const isLogin = mode === "login";
+  loginPanel.hidden = !isLogin;
+  registerPanel.hidden = isLogin;
+  tabLogin.classList.toggle("active", isLogin);
+  tabRegister.classList.toggle("active", !isLogin);
+  loginFeedback.hidden = true;
+  loginFeedback.textContent = "";
+}
+
 openLoginModal.addEventListener("click", openModal);
 closeLoginModal.addEventListener("click", closeModal);
+closeRegisterModal.addEventListener("click", closeModal);
+tabLogin.addEventListener("click", () => setAuthTab("login"));
+tabRegister.addEventListener("click", () => setAuthTab("register"));
 loginModal.addEventListener("click", (event) => {
   if (event.target === loginModal) {
     closeModal();
@@ -364,14 +384,30 @@ submitLogin.addEventListener("click", () => {
   sessionBadge.textContent = `Sesión activa: ${roleLabel}`;
   openLoginModal.textContent = "Mi cuenta";
 
-  loginFeedback.hidden = false;
-  loginFeedback.textContent = `Ingreso correcto como ${roleLabel}. Redirigiendo...`;
-  loginFeedback.className = "login-feedback success";
+  closeModal();
+  navigate(role === "artesano" ? "artesano" : "marketplace");
+});
 
-  setTimeout(() => {
-    closeModal();
-    navigate(role === "artesano" ? "artesano" : "marketplace");
-  }, 450);
+submitRegister.addEventListener("click", () => {
+  const role = document.getElementById("registerRole").value;
+  const roleLabel = role === "artesano" ? "Vendedor" : "Cliente";
+  const name = document.getElementById("registerName").value.trim();
+  const email = document.getElementById("registerEmail").value.trim();
+  const password = document.getElementById("registerPassword").value.trim();
+
+  if (!name || !email || password.length < 8) {
+    loginFeedback.hidden = false;
+    loginFeedback.textContent = "Completa todos los campos y usa una contraseña de mínimo 8 caracteres.";
+    loginFeedback.className = "login-feedback error";
+    return;
+  }
+
+  sessionBadge.hidden = false;
+  sessionBadge.textContent = `Cuenta creada: ${roleLabel}`;
+  openLoginModal.textContent = "Mi cuenta";
+
+  closeModal();
+  navigate(role === "artesano" ? "artesano" : "marketplace");
 });
 
 document.addEventListener("click", (event) => {
