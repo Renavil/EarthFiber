@@ -190,6 +190,7 @@ const closeLoginModal = document.getElementById("closeLoginModal");
 const submitLogin = document.getElementById("submitLogin");
 const loginRole = document.getElementById("loginRole");
 const sessionBadge = document.getElementById("sessionBadge");
+const loginFeedback = document.getElementById("loginFeedback");
 
 let currentProductId = "qori";
 let videoObserver;
@@ -330,6 +331,8 @@ function navigate(route) {
 
 function openModal() {
   loginModal.hidden = false;
+  loginFeedback.hidden = true;
+  loginFeedback.textContent = "";
 }
 
 function closeModal() {
@@ -347,12 +350,28 @@ loginModal.addEventListener("click", (event) => {
 submitLogin.addEventListener("click", () => {
   const role = loginRole.value;
   const roleLabel = role === "artesano" ? "Vendedor" : "Cliente";
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+
+  if (!email || !password) {
+    loginFeedback.hidden = false;
+    loginFeedback.textContent = "Completa correo y contraseña para continuar.";
+    loginFeedback.className = "login-feedback error";
+    return;
+  }
 
   sessionBadge.hidden = false;
-  sessionBadge.textContent = `Sesión: ${roleLabel}`;
-  openLoginModal.textContent = role === "artesano" ? "Panel vendedor" : "Mi cuenta";
+  sessionBadge.textContent = `Sesión activa: ${roleLabel}`;
+  openLoginModal.textContent = "Mi cuenta";
 
-  closeModal();
+  loginFeedback.hidden = false;
+  loginFeedback.textContent = `Ingreso correcto como ${roleLabel}. Redirigiendo...`;
+  loginFeedback.className = "login-feedback success";
+
+  setTimeout(() => {
+    closeModal();
+    navigate(role === "artesano" ? "artesano" : "marketplace");
+  }, 450);
 });
 
 document.addEventListener("click", (event) => {
