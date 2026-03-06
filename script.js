@@ -98,6 +98,7 @@ const STORAGE_USERS = "earthfiber_users";
 const STORAGE_SESSION = "earthfiber_session";
 const STORAGE_CUSTOM_PRODUCTS = "earthfiber_custom_products";
 const STORAGE_B2B_LEADS = "earthfiber_b2b_leads";
+const STORAGE_REVIEWS = "earthfiber_reviews";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const nameRegex = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]{2,}$/;
@@ -111,6 +112,7 @@ let currentProductId = "qori";
 let currentLeadId = null;
 let authSession = null;
 let videoObserver;
+let selectedReviewStars = 0;
 
 const productGrid = document.getElementById("productGrid");
 const artisanProducts = document.getElementById("artisanProducts");
@@ -144,6 +146,14 @@ const inboxChatMessages = document.getElementById("inboxChatMessages");
 const sellerReplyForm = document.getElementById("sellerReplyForm");
 const sellerReplyText = document.getElementById("sellerReplyText");
 const sellerReplyFeedback = document.getElementById("sellerReplyFeedback");
+
+const reviewForm = document.getElementById("reviewForm");
+const reviewRoleHint = document.getElementById("reviewRoleHint");
+const reviewComment = document.getElementById("reviewComment");
+const reviewFeedback = document.getElementById("reviewFeedback");
+const reviewSummary = document.getElementById("reviewSummary");
+const reviewList = document.getElementById("reviewList");
+const starButtons = Array.from(document.querySelectorAll(".star-btn"));
 
 const b2bForm = document.getElementById("b2bForm");
 const b2bFeedback = document.getElementById("b2bFeedback");
@@ -217,6 +227,15 @@ function saveLeads(leads) {
   localStorage.setItem(STORAGE_B2B_LEADS, JSON.stringify(leads));
 }
 
+function getReviews() {
+  const raw = localStorage.getItem(STORAGE_REVIEWS);
+  return raw ? JSON.parse(raw) : [];
+}
+
+function saveReviews(reviews) {
+  localStorage.setItem(STORAGE_REVIEWS, JSON.stringify(reviews));
+}
+
 function setSession(user) {
   authSession = { email: user.email, role: user.role, fullName: user.fullName };
   localStorage.setItem(STORAGE_SESSION, JSON.stringify(authSession));
@@ -250,6 +269,7 @@ function applySessionUI() {
     sellerRouteBtn.hidden = true;
   }
   updateContactViewMode();
+  renderReviewSection(currentProductId);
 }
 
 function setFeedback(el, message, type = "error") {
@@ -309,6 +329,49 @@ function compressImageDataUrl(dataUrl, maxWidth = 1280, quality = 0.78) {
     img.onerror = () => resolve(dataUrl);
     img.src = dataUrl;
   });
+}
+
+function updateStarInputUI() {
+  starButtons.forEach((btn) => {
+    btn.classList.toggle("active", Number(btn.dataset.star) <= selectedReviewStars);
+  });
+}
+
+function renderReviewSection(productId) {
+  const isClient = authSession?.role === "cliente";
+  reviewForm.hidden = !isClient;
+  reviewRoleHint.hidden = isClient;
+  if (isClient) {
+    reviewRoleHint.textContent = "";
+  } else {
+    reviewRoleHint.textContent = "Inicia sesión como cliente para dejar tu valoración.";
+  }
+
+  const reviews = getReviews().filter((r) => r.productId === productId);
+  if (!reviews.length) {
+    reviewSummary.textContent = "Aún no hay reseñas para este producto.";
+    reviewList.innerHTML = "";
+    return;
+  }
+
+  const avg = reviews.reduce((acc, r) => acc + r.stars, 0) / reviews.length;
+  reviewSummary.textContent = `Promedio: ${avg.toFixed(1)} ★ (${reviews.length} reseñas)`;
+  reviewList.innerHTML = reviews
+    .slice()
+    .reverse()
+    .map(
+      (r) => `<article class="review-item"><strong>${"★".repeat(r.stars)}${"☆".repeat(5-r.stars)}</strong><p>${r.comment}</p><div class="meta">${r.author} · ${new Date(r.createdAt).toLocaleDateString()}</div></article>`
+    )
+    .join("");
+}
+
+function getArtisanRating(artisanName) {
+  const artisanProducts = productList.filter((p) => p.artisanProfile.name === artisanName);
+  const ids = new Set(artisanProducts.map((p) => p.id));
+  const reviews = getReviews().filter((r) => ids.has(r.productId));
+  if (!reviews.length) return null;
+  const avg = reviews.reduce((sum, r) => sum + r.stars, 0) / reviews.length;
+  return `⭐ ${avg.toFixed(1)}/5`;
 }
 
 function renderMarketplace() {
@@ -387,6 +450,8 @@ function renderProduct(productId) {
   document.getElementById("detailArtisan").textContent = product.artisan;
   document.getElementById("storyVideo").src = product.storyVideo;
 
+  renderReviewSection(product.id);
+
   floatingText.textContent = `Ver perfil de ${product.artisanProfile.name.split("·")[0].trim()}`;
   floatingImage.src = product.artisanProfile.image || placeholderAvatar;
 }
@@ -402,25 +467,29 @@ function renderArtisanFromCurrentProduct() {
   document.getElementById("artisanExp").textContent = artisan.experience;
   document.getElementById("artisanOrigin").textContent = artisan.origin;
   document.getElementById("artisanTechnique").textContent = artisan.technique;
-  document.getElementById("artisanRating").textContent = artisan.profileRating;
+  const dynamicRating = getArtisanRating(artisan.name);
+  document.getElementById("artisanRating").textContent = dynamicRating || artisan.profileRating;
   document.getElementById("donationGoal").textContent = artisan.donationGoal;
   document.getElementById("donationProgress").textContent = `S/ ${artisan.donationCurrent} recaudados de S/ ${artisan.donationTarget}`;
   document.getElementById("progressBar").style.width = `${Math.min((artisan.donationCurrent / artisan.donationTarget) * 100, 100)}%`;
 
-  const related = productList.filter((item) => item.artisanProfile.name === artisan.name);
-  const others = productList.filter((item) => item.artisanProfile.name !== artisan.name);
-  const carouselProducts = [...related, ...others].slice(0, 10);
+  const carouselProducts = productList.filter((item) => item.artisanProfile.name === artisan.name);
 
-  artisanProducts.innerHTML = carouselProducts
-    .map(
-      (item) => `
-      <article class="mini-card" data-product-id="${item.id}">
-        <h4>${item.name}</h4>
-        <p>${item.price}</p>
-        <small>Ver detalle del producto →</small>
-      </article>`
-    )
-    .join("");
+  if (!carouselProducts.length) {
+    artisanProducts.innerHTML = "<p>Este artesano aún no tiene productos publicados.</p>";
+  } else {
+    artisanProducts.innerHTML = carouselProducts
+      .map(
+        (item) => `
+        <article class="mini-card" data-product-id="${item.id}">
+          <img src="${item.image}" alt="${item.name}" />
+          <h4>${item.name}</h4>
+          <p>${item.price}</p>
+          <small>Ver detalle del producto →</small>
+        </article>`
+      )
+      .join("");
+  }
 }
 
 function navigate(route) {
@@ -575,6 +644,49 @@ function openLeadChat(leadId) {
     .map((msg) => `<div class="chat-msg ${msg.from}"><strong>${msg.from === "company" ? "Empresa" : "Artesano"}:</strong> ${msg.text}</div>`)
     .join("");
 }
+
+starButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    selectedReviewStars = Number(btn.dataset.star);
+    updateStarInputUI();
+  });
+});
+
+reviewForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  if (authSession?.role !== "cliente") {
+    setFeedback(reviewFeedback, "Solo los clientes pueden dejar reseñas.");
+    return;
+  }
+
+  const comment = reviewComment.value.trim();
+  if (selectedReviewStars < 1 || selectedReviewStars > 5) {
+    setFeedback(reviewFeedback, "Selecciona una calificación de 1 a 5 estrellas.");
+    return;
+  }
+  if (comment.length < 6) {
+    setFeedback(reviewFeedback, "Escribe una reseña con al menos 6 caracteres.");
+    return;
+  }
+
+  const reviews = getReviews();
+  reviews.push({
+    productId: currentProductId,
+    stars: selectedReviewStars,
+    comment,
+    author: authSession.fullName,
+    createdAt: new Date().toISOString(),
+  });
+  saveReviews(reviews);
+
+  reviewComment.value = "";
+  selectedReviewStars = 0;
+  updateStarInputUI();
+  setFeedback(reviewFeedback, "Reseña publicada correctamente.", "success");
+
+  renderReviewSection(currentProductId);
+});
 
 openLoginModal.addEventListener("click", () => {
   if (authSession) {

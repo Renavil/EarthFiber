@@ -295,6 +295,65 @@ textarea {
 
 .mini-card small { color: #6d635a; }
 
+
+.review-panel {
+  margin-top: 1rem;
+}
+
+.review-form {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.star-input {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.star-btn {
+  border: 0;
+  background: transparent;
+  font-size: 1.35rem;
+  color: #b7aca0;
+  cursor: pointer;
+  padding: 0;
+}
+
+.star-btn.active {
+  color: #b07b2f;
+}
+
+.review-summary {
+  margin-top: 0.8rem;
+  font-weight: 600;
+}
+
+.review-list {
+  margin-top: 0.7rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.review-item {
+  border: 1px solid #e6dbcf;
+  border-radius: 10px;
+  padding: 0.6rem;
+  background: #fcfaf7;
+}
+
+.review-item .meta {
+  font-size: 0.82rem;
+  color: #6f655d;
+}
+
+.mini-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+}
+
 .donation-panel { margin-top: 1rem; }
 
 .progress-wrap {

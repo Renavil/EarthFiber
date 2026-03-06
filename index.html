@@ -123,6 +123,26 @@
             </div>
           </div>
 
+          <section class="panel review-panel">
+            <h3>Valoración del producto</h3>
+            <p id="reviewRoleHint">Inicia sesión como cliente para dejar tu valoración.</p>
+            <form id="reviewForm" class="review-form" novalidate>
+              <label>Tu calificación</label>
+              <div class="star-input" id="starInput" role="radiogroup" aria-label="Calificación de 1 a 5">
+                <button type="button" class="star-btn" data-star="1">★</button>
+                <button type="button" class="star-btn" data-star="2">★</button>
+                <button type="button" class="star-btn" data-star="3">★</button>
+                <button type="button" class="star-btn" data-star="4">★</button>
+                <button type="button" class="star-btn" data-star="5">★</button>
+              </div>
+              <textarea id="reviewComment" rows="3" placeholder="Escribe tu reseña..."></textarea>
+              <button class="btn btn-primary" type="submit">Publicar reseña</button>
+              <p class="form-feedback" id="reviewFeedback" hidden></p>
+            </form>
+            <div class="review-summary" id="reviewSummary"></div>
+            <div class="review-list" id="reviewList"></div>
+          </section>
+
           <article class="narrative">
             <figure>
               <figcaption>Video: Historia del artesano</figcaption>
