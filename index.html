@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Earth Fiber | Moda con propósito</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="top-nav">
+        <button class="brand route-link" data-route="home">Earth Fiber</button>
+        <div class="nav-links">
+          <button class="route-link" data-route="home">Inicio</button>
+          <button class="route-link" data-route="marketplace">Marketplace</button>
+          <button class="route-link" id="sellerRouteBtn" data-route="seller" hidden>Panel vendedor</button>
+          <button class="route-link" data-route="contacto">Contacto B2B</button>
+          <button class="route-link" data-route="cart">Carrito</button>
+          <button class="route-link" data-route="nosotros">Nosotros</button>
+        </div>
+        <div class="nav-auth">
+          <span id="sessionBadge" class="session-badge" hidden></span>
+          <button class="btn btn-primary btn-login" id="openLoginModal">Iniciar sesión</button>
+          <button class="btn btn-outline" id="logoutBtn" hidden>Cerrar sesión</button>
+        </div>
+      </nav>
+    </header>
+
+    <main id="app">
+      <section id="view-home" class="view active">
+        <div class="hero">
+          <div class="hero-content">
+            <span class="tag">Moda artesanal peruana</span>
+            <h1>No solo vistes una prenda. Vistes una historia.</h1>
+            <p>
+              Elegancia, cultura e impacto en una plataforma que conecta artesanas/os de algodón
+              nativo con clientes y empresas.
+            </p>
+            <div class="hero-actions">
+              <button class="btn btn-primary route-link" data-route="marketplace">Explorar tienda</button>
+              <button class="btn btn-outline route-link" data-route="artesano">Conocer artesanos</button>
+              <button class="btn btn-outline route-link" data-route="nosotros">Nosotros</button>
+            </div>
+          </div>
+        </div>
+
+        <section class="block intro-cards">
+          <article>
+            <h3>Compra con propósito</h3>
+            <p>Descubre productos con historia real y calidad artesanal.</p>
+          </article>
+          <article>
+            <h3>Vende como artesano/a</h3>
+            <p>Crea tu cuenta de vendedor, publica productos y recibe contactos mayoristas.</p>
+          </article>
+          <article>
+            <h3>Apoya metas reales</h3>
+            <p>Contribuye a donaciones transparentes que impulsan el crecimiento familiar.</p>
+          </article>
+        </section>
+      </section>
+
+      <section id="view-marketplace" class="view">
+        <section class="block">
+          <div class="section-head">
+            <h2>Marketplace / Tienda</h2>
+            <p>Haz clic en cualquier producto para ver su detalle completo.</p>
+          </div>
+          <div class="market-layout">
+            <aside class="filters">
+              <h3>Filtros</h3>
+              <label>Tipo de producto
+                <select id="filterType">
+                  <option value="">Todos</option>
+                  <option>Blusa</option><option>Vestido</option><option>Bolso</option><option>Bufanda</option>
+                  <option>Guantes</option><option>Polo</option><option>Falda</option><option>Casaca</option>
+                  <option>Pantalón</option><option>Camisa</option><option>Gorro</option><option>Pijama</option>
+                  <option>Short</option><option>Otro</option>
+                </select>
+              </label>
+              <label>Género
+                <select id="filterGender">
+                  <option value="">Todos</option>
+                  <option>Femenino</option>
+                  <option>Masculino</option>
+                  <option>Unisex</option>
+                </select>
+              </label>
+              <label>Talla
+                <select id="filterSize">
+                  <option value="">Todas</option>
+                  <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option>
+                </select>
+              </label>
+              <label>Rango de precio (S/)
+                <div class="price-inputs">
+                  <input id="minPriceInput" type="number" min="0" step="1" placeholder="Mínimo" value="0" />
+                  <span>-</span>
+                  <input id="maxPriceInput" type="number" min="0" step="1" placeholder="Máximo" value="1000" />
+                </div>
+                <div class="double-range">
+                  <input id="minPriceRange" type="range" min="0" max="2000" value="0" />
+                  <input id="maxPriceRange" type="range" min="0" max="2000" value="1000" />
+                </div>
+              </label>
+            </aside>
+
+            <div class="product-grid" id="productGrid"></div>
+          </div>
+        </section>
+      </section>
+
+      <section id="view-product" class="view">
+        <section class="block">
+          <div class="section-head">
+            <h2>Detalle del producto</h2>
+          </div>
+
+          <div class="detail-layout">
+            <img id="detailImage" class="detail-main-image" src="" alt="Imagen del producto" />
+            <div class="detail-info">
+              <h3 id="detailName"></h3>
+              <p class="price" id="detailPrice"></p>
+              <p id="detailDescription"></p>
+              <ul>
+                <li id="detailSize"></li>
+                <li id="detailStock"></li>
+                <li id="detailArtisan"></li>
+              </ul>
+              <div class="hero-actions">
+                <button class="btn btn-primary" id="buyNowBtn">Comprar</button>
+                <button class="btn btn-outline" id="addToCartBtn">Agregar al carrito</button>
+              </div>
+            </div>
+          </div>
+
+          <section class="panel review-panel">
+            <h3>Valoración del producto</h3>
+            <p id="reviewRoleHint">Inicia sesión como cliente para dejar tu valoración.</p>
+            <form id="reviewForm" class="review-form" novalidate>
+              <label>Tu calificación</label>
+              <div class="star-input" id="starInput" role="radiogroup" aria-label="Calificación de 1 a 5">
+                <button type="button" class="star-btn" data-star="1">★</button>
+                <button type="button" class="star-btn" data-star="2">★</button>
+                <button type="button" class="star-btn" data-star="3">★</button>
+                <button type="button" class="star-btn" data-star="4">★</button>
+                <button type="button" class="star-btn" data-star="5">★</button>
+              </div>
+              <textarea id="reviewComment" rows="3" placeholder="Escribe tu reseña..."></textarea>
+              <button class="btn btn-primary" type="submit">Publicar reseña</button>
+              <p class="form-feedback" id="reviewFeedback" hidden></p>
+            </form>
+            <div class="review-summary" id="reviewSummary"></div>
+            <div class="review-list" id="reviewList"></div>
+          </section>
+
+          <article class="narrative">
+            <figure>
+              <figcaption>Video: Historia del artesano</figcaption>
+              <video id="storyVideo" class="auto-video" controls muted loop playsinline preload="metadata"></video>
+            </figure>
+          </article>
+
+
+          <section class="panel chat-panel">
+            <h3>Chat cliente - vendedor</h3>
+            <div id="chatMessages" class="chat-messages"></div>
+            <form id="chatForm" class="reply-form">
+              <input id="chatSender" type="text" placeholder="Tu nombre" />
+              <textarea id="chatText" rows="2" placeholder="Escribe tu mensaje..."></textarea>
+              <button class="btn btn-primary" type="submit">Enviar mensaje</button>
+            </form>
+            <p class="form-feedback" id="chatFeedback" hidden></p>
+          </section>
+        </section>
+      </section>
+      <section id="view-artesano" class="view">
+        <section class="block">
+          <div class="section-head">
+            <h2>Perfil del artesano/a</h2>
+            <p>Historia, logros, catálogo funcional, compras mayoristas y metas de donación.</p>
+          </div>
+
+          <div class="profile-card enhanced">
+            <img id="artisanImage" src="" alt="Perfil artesano" />
+            <div>
+              <h3 id="artisanName"></h3>
+              <p id="artisanBio"></p>
+              <div class="artisan-meta">
+                <div><strong id="artisanExp"></strong><span>Experiencia</span></div>
+                <div><strong id="artisanOrigin"></strong><span>Origen</span></div>
+                <div><strong id="artisanTechnique"></strong><span>Técnica principal</span></div>
+                <div><strong id="artisanRating"></strong><span>Valoración</span></div>
+              </div>
+              <div class="hero-actions">
+                <button class="btn btn-outline route-link" data-route="contacto">Cotizar pedido para empresa</button>
+                <button class="btn btn-primary route-link" data-route="marketplace">Volver a tienda</button>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="subheading">Productos de este artesano/a</h3>
+          <div class="carousel" id="artisanProducts"></div>
+
+          <article class="panel donation-panel">
+            <h3>Módulo de donaciones</h3>
+            <p id="donationGoal"></p>
+            <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+            <p class="progress-text" id="donationProgress"></p>
+            <div class="hero-actions">
+              <button class="btn btn-outline">Donar S/ 5</button>
+              <button class="btn btn-outline">Donar S/ 10</button>
+              <button class="btn btn-primary">Otro monto</button>
+            </div>
+          </article>
+        </section>
+      </section>
+
+      <section id="view-contacto" class="view">
+        <section class="block">
+          <div class="section-head">
+            <h2>Contacto B2B / Empresas</h2>
+            <p>Empresas envían solicitudes; artesanos las reciben en su bandeja.</p>
+          </div>
+
+          <div id="companyContactSection">
+            <form class="contact-form" id="b2bForm" novalidate>
+              <input id="companyName" type="text" placeholder="Nombre de empresa" />
+              <input id="companyRuc" type="text" placeholder="RUC (11 dígitos)" inputmode="numeric" maxlength="11" />
+              <input id="contactPerson" type="text" placeholder="Persona de contacto" />
+              <input id="contactEmail" type="email" placeholder="Correo" />
+              <input id="interestProduct" type="text" placeholder="Producto(s) de interés" />
+              <input id="estimatedQty" type="number" placeholder="Cantidad estimada" min="1" />
+              <textarea id="contactDetails" rows="4" placeholder="Fecha requerida y detalles adicionales"></textarea>
+              <button class="btn btn-primary" id="submitB2B" type="submit">Enviar solicitud comercial</button>
+              <p class="form-feedback" id="b2bFeedback" hidden></p>
+            </form>
+          </div>
+
+          <div id="sellerInboxSection" hidden>
+            <article class="panel">
+              <h3>Bandeja de solicitudes empresariales</h3>
+              <p>Aquí ves los formularios enviados por empresas y puedes responder.</p>
+              <div id="sellerInboxList" class="inbox-list"></div>
+            </article>
+            <article class="panel" id="inboxChatPanel" hidden>
+              <h3 id="chatTitle">Chat con empresa</h3>
+              <div id="inboxChatMessages" class="chat-messages"></div>
+              <form id="sellerReplyForm" class="reply-form">
+                <textarea id="sellerReplyText" rows="3" placeholder="Escribe una respuesta para la empresa..."></textarea>
+                <button class="btn btn-primary" type="submit">Enviar respuesta</button>
+              </form>
+              <p class="form-feedback" id="sellerReplyFeedback" hidden></p>
+            </article>
+          </div>
+        </section>
+      </section>
+
+
+      <section id="view-cart" class="view">
+        <section class="block">
+          <div class="section-head"><h2>Carrito de compras</h2></div>
+          <div class="panel">
+            <div id="cartList"></div>
+            <p><strong>Total:</strong> <span id="cartTotal">S/ 0.00</span></p>
+          </div>
+
+          <div class="panel payment-panel">
+            <h3>Pago</h3>
+            <div class="payment-methods">
+              <label><input type="radio" name="payMethod" value="tarjeta" checked /> Tarjeta</label>
+              <label><input type="radio" name="payMethod" value="yape" /> Yape</label>
+            </div>
+            <div id="cardFields">
+              <input id="cardName" type="text" placeholder="Nombre en la tarjeta" />
+              <input id="cardNumber" type="text" placeholder="Número de tarjeta" />
+              <div class="price-inputs">
+                <input id="cardExp" type="text" placeholder="MM/AA" />
+                <input id="cardCvv" type="text" placeholder="CVV" />
+              </div>
+            </div>
+            <div id="yapeBox" hidden>
+              <p>Escanea este QR de Yape para pagar:</p>
+              <img alt="QR Yape" class="yape-qr" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=YAPE-EARTHFIBER-DEMO" />
+            </div>
+            <button class="btn btn-primary" id="checkoutBtn" type="button">Confirmar pago</button>
+            <p class="form-feedback" id="checkoutFeedback" hidden></p>
+          </div>
+        </section>
+      </section>
+
+
+      <section id="view-nosotros" class="view">
+        <section class="block">
+          <div class="section-head">
+            <h2>Nosotros</h2>
+            <p>Conectamos tradición, talento artesanal y comercio justo.</p>
+          </div>
+          <article class="panel">
+            <p>No somos solo un grupo de gestión; somos el puente entre una fibra ancestral y el mundo contemporáneo. En EarthFiber, creemos que cada prenda de algodón nativo cuenta una historia de paciencia, técnica y orgullo peruano.</p>
+            <p>Nuestra misión es simple pero poderosa: Queremos que el arte de nuestras maestras artesanas deje de ser un secreto y se convierta en un motor de cambio. Trabajamos para que el mundo vea la belleza de este proceso artesanal y para que el talento de estas mujeres se traduzca en negocios sostenibles que transformen sus vidas.</p>
+          </article>
+        </section>
+      </section>
+
+      <section id="view-seller" class="view">
+        <section class="block">
+          <div class="section-head">
+            <h2>Panel de vendedor / artesano</h2>
+            <p>Publica productos y actualiza tu perfil artesanal.</p>
+            <div class="hero-actions"><button class="btn btn-outline route-link" data-route="nosotros">Conoce más sobre EarthFiber</button></div>
+          </div>
+
+          <div class="seller-grid">
+            <form class="panel" id="sellerProductForm" novalidate>
+              <h3>Publicar / editar producto</h3>
+              <input id="sellerEditingId" type="hidden" />
+              <input id="sellerProductName" type="text" placeholder="Nombre del producto" />
+              <input id="sellerProductPrice" type="number" min="1" step="1" inputmode="numeric" placeholder="Precio (solo número, ej: 199)" />
+              <select id="sellerProductCategory">
+                <option value="">Categoría</option>
+                <option>Blusa</option><option>Vestido</option><option>Bolso</option><option>Bufanda</option>
+                <option>Guantes</option><option>Polo</option><option>Falda</option><option>Casaca</option>
+                <option>Pantalón</option><option>Camisa</option><option>Gorro</option><option>Pijama</option>
+                <option>Short</option><option>Otro</option>
+              </select>
+              <input id="sellerProductImage" type="file" accept="image/*" />
+              <input id="sellerProductImagePath" type="text" placeholder="o ruta de imagen local: assets/productos/mi-imagen.jpg" />
+              <img id="sellerImagePreview" class="seller-image-preview" alt="Vista previa del producto" hidden />
+              <textarea id="sellerProductDescription" rows="3" placeholder="Descripción del producto"></textarea>
+              <input id="sellerProductSizes" type="text" placeholder="Tallas (opcional): XS, S, M..." />
+              <select id="sellerProductGender">
+                <option value="Unisex">Género: Unisex</option>
+                <option value="Femenino">Género: Femenino</option>
+                <option value="Masculino">Género: Masculino</option>
+              </select>
+              <label class="checkbox-label"><input id="sellerNoStock" type="checkbox" /> Sin stock</label>
+              <input id="sellerProductStock" type="number" min="0" step="1" value="10" placeholder="Stock" />
+              <small class="input-help">Imagen principal: coloca tu archivo en una carpeta del proyecto (por ejemplo `assets/productos/`) y selecciona ese archivo desde "Subir imagen".</small>
+              <button class="btn btn-primary" type="submit" id="sellerProductSubmitBtn">Publicar producto</button>
+              <p class="form-feedback" id="sellerProductFeedback" hidden></p>
+            </form>
+
+            <form class="panel" id="sellerProfileForm" novalidate>
+              <h3>Editar perfil de artesano</h3>
+              <input id="sellerProfileName" type="text" placeholder="Nombre visible" />
+              <input id="sellerProfileOrigin" type="text" placeholder="Origen (Ciudad, País)" />
+              <input id="sellerProfileTechnique" type="text" placeholder="Técnica principal" />
+              <textarea id="sellerProfileBio" rows="3" placeholder="Biografía / historia"></textarea>
+              <label for="sellerStoryVideo" class="file-label">Video de historia del artesano (aplica a todos tus productos)</label>
+              <input id="sellerStoryVideo" type="file" accept="video/mp4,video/webm,video/ogg" />
+              <video id="sellerStoryVideoPreview" class="seller-video-preview" controls preload="metadata" hidden></video>
+              <button class="btn btn-primary" type="submit">Guardar perfil</button>
+              <p class="form-feedback" id="sellerProfileFeedback" hidden></p>
+            </form>
+
+            <article class="panel">
+              <h3>Mis productos publicados</h3>
+              <p>Revisa y edita los productos que ya has publicado.</p>
+              <div id="sellerProductsList" class="seller-products-list"></div>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <button class="floating-artisan" id="floatingArtisan" type="button">
+      <img id="floatingImage" src="" alt="" />
+      <span id="floatingText">Ver perfil del artesano</span>
+    </button>
+
+    <div class="modal-backdrop" id="loginModal" hidden>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+        <h3 id="loginTitle">Acceso a Earth Fiber</h3>
+        <p>Inicia sesión o crea una cuenta para continuar.</p>
+
+        <div class="auth-tabs" role="tablist" aria-label="Opciones de autenticación">
+          <button class="auth-tab active" id="tabLogin" type="button">Iniciar sesión</button>
+          <button class="auth-tab" id="tabRegister" type="button">Crear cuenta</button>
+        </div>
+
+        <div id="loginPanel">
+          <label>Tipo de cuenta
+            <select id="loginRole">
+              <option value="cliente">Cliente</option>
+              <option value="artesano">Artesano/a vendedor</option>
+            </select>
+          </label>
+          <label>Correo
+            <input id="loginEmail" type="email" placeholder="correo@ejemplo.com" />
+          </label>
+          <label>Contraseña
+            <input id="loginPassword" type="password" placeholder="••••••••" />
+          </label>
+          <div class="modal-actions">
+            <button class="btn btn-outline" id="closeLoginModal" type="button">Cancelar</button>
+            <button class="btn btn-primary" id="submitLogin" type="button">Iniciar sesión</button>
+          </div>
+        </div>
+
+        <div id="registerPanel" hidden>
+          <label>Tipo de cuenta
+            <select id="registerRole">
+              <option value="cliente">Cliente</option>
+              <option value="artesano">Artesano/a vendedor</option>
+            </select>
+          </label>
+          <label>Nombre completo
+            <input id="registerName" type="text" placeholder="Nombre y apellidos" />
+          </label>
+          <label>Correo
+            <input id="registerEmail" type="email" placeholder="correo@ejemplo.com" />
+          </label>
+          <label>Contraseña
+            <input id="registerPassword" type="password" placeholder="Mínimo 8 caracteres" />
+          </label>
+          <div class="modal-actions">
+            <button class="btn btn-outline" id="closeRegisterModal" type="button">Cancelar</button>
+            <button class="btn btn-primary" id="submitRegister" type="button">Crear cuenta</button>
+          </div>
+        </div>
+
+        <p class="login-feedback" id="loginFeedback" hidden></p>
+        <p class="login-note">Demo de prueba: muestra sesión activa y rol (cliente o vendedor).</p>
+      </div>
+    </div>
+
+    <footer>
+      <p>Earth Fiber © 2026 · Elegancia que preserva cultura.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
