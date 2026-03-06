@@ -4,6 +4,7 @@ const views = {
   product: document.getElementById("view-product"),
   artesano: document.getElementById("view-artesano"),
   contacto: document.getElementById("view-contacto"),
+  seller: document.getElementById("view-seller"),
 };
 
 const products = {
@@ -91,93 +92,13 @@ const products = {
       donationTarget: 150,
     },
   },
-  inti: {
-    id: "inti",
-    name: "Bufanda Inti",
-    category: "Bufanda",
-    rating: "4.6",
-    price: "S/ 110",
-    image: "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&w=1200&q=80",
-    description: "Bufanda de fibra natural con patrón andino y acabado suave para climas fríos.",
-    size: "Talla: Única",
-    stock: "Stock: 30 unidades",
-    artisan: "Artesana: Rosa Ccahuana (Cusco)",
-    story: "Rosa impulsa una red de mujeres tejedoras que preservan técnicas comunitarias.",
-    process: "Tejido en telar de cintura y acabado con lavado artesanal en frío.",
-    storyVideo: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
-    processVideo: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm",
-    artisanProfile: {
-      name: "Rosa Ccahuana · Cusco",
-      image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80",
-      bio: "Lideresa textil comunitaria y promotora de moda artesanal con enfoque de comercio justo.",
-      experience: "16 años",
-      origin: "Cusco, Perú",
-      technique: "Telar de cintura",
-      profileRating: "⭐ 4.6/5",
-      donationGoal: "Rosa busca S/ 200 para equipar su taller con nuevas agujas y telares.",
-      donationCurrent: 145,
-      donationTarget: 200,
-    },
-  },
-  kantu: {
-    id: "kantu",
-    name: "Blusa Kantu",
-    category: "Blusa",
-    rating: "4.8",
-    price: "S/ 210",
-    image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80",
-    description: "Blusa premium en algodón nativo de color natural con costura reforzada.",
-    size: "Tallas: M, L",
-    stock: "Stock: 11 unidades",
-    artisan: "Artesana: Julia Ñahui (Lima)",
-    story: "Julia fusiona patronaje moderno con técnicas de bordado heredadas por su abuela.",
-    process: "Diseño, corte y bordado manual por lotes pequeños para asegurar calidad.",
-    storyVideo: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
-    processVideo: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm",
-    artisanProfile: {
-      name: "Julia Ñahui · Lima",
-      image: "https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=900&q=80",
-      bio: "Diseñadora y artesana que conecta moda urbana con identidad textil peruana.",
-      experience: "7 años",
-      origin: "Lima, Perú",
-      technique: "Bordado contemporáneo",
-      profileRating: "⭐ 4.8/5",
-      donationGoal: "Julia necesita S/ 280 para adquirir una remalladora industrial.",
-      donationCurrent: 98,
-      donationTarget: 280,
-    },
-  },
-  nayra: {
-    id: "nayra",
-    name: "Vestido Nayra",
-    category: "Vestido",
-    rating: "4.9",
-    price: "S/ 340",
-    image: "https://images.unsplash.com/photo-1591369822096-ffd140ec948f?auto=format&fit=crop&w=1200&q=80",
-    description: "Vestido de edición limitada elaborado en fibras naturales y teñido orgánico.",
-    size: "Tallas: S, M",
-    stock: "Stock: 6 unidades",
-    artisan: "Artesana: Miriam Soto (Arequipa)",
-    story: "Miriam lidera talleres de formación para jóvenes artesanas en diseño textil.",
-    process: "Teñido orgánico, confección por etapas y pruebas de acabado para colección premium.",
-    storyVideo: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
-    processVideo: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm",
-    artisanProfile: {
-      name: "Miriam Soto · Arequipa",
-      image: "https://images.unsplash.com/photo-1546961329-78bef0414d7c?auto=format&fit=crop&w=900&q=80",
-      bio: "Artesana y formadora textil con enfoque en innovación de prendas premium.",
-      experience: "13 años",
-      origin: "Arequipa, Perú",
-      technique: "Confección premium",
-      profileRating: "⭐ 4.9/5",
-      donationGoal: "Miriam busca S/ 360 para financiar becas de formación textil.",
-      donationCurrent: 210,
-      donationTarget: 360,
-    },
-  },
 };
 
-const productList = Object.values(products);
+const STORAGE_USERS = "earthfiber_users";
+const STORAGE_SESSION = "earthfiber_session";
+
+let productList = Object.values(products);
+
 const productGrid = document.getElementById("productGrid");
 const artisanProducts = document.getElementById("artisanProducts");
 const floatingArtisan = document.getElementById("floatingArtisan");
@@ -190,6 +111,9 @@ const closeLoginModal = document.getElementById("closeLoginModal");
 const submitLogin = document.getElementById("submitLogin");
 const loginRole = document.getElementById("loginRole");
 const sessionBadge = document.getElementById("sessionBadge");
+const logoutBtn = document.getElementById("logoutBtn");
+const sellerRouteBtn = document.getElementById("sellerRouteBtn");
+
 const loginFeedback = document.getElementById("loginFeedback");
 const tabLogin = document.getElementById("tabLogin");
 const tabRegister = document.getElementById("tabRegister");
@@ -198,14 +122,106 @@ const registerPanel = document.getElementById("registerPanel");
 const closeRegisterModal = document.getElementById("closeRegisterModal");
 const submitRegister = document.getElementById("submitRegister");
 
+const b2bForm = document.getElementById("b2bForm");
+const b2bFeedback = document.getElementById("b2bFeedback");
+
+const sellerProductForm = document.getElementById("sellerProductForm");
+const sellerProfileForm = document.getElementById("sellerProfileForm");
+const sellerProductFeedback = document.getElementById("sellerProductFeedback");
+const sellerProfileFeedback = document.getElementById("sellerProfileFeedback");
+
 let currentProductId = "qori";
 let videoObserver;
+let authSession = null;
 
 const placeholderAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='100%25' height='100%25' fill='%238a5a3b'/%3E%3Ctext x='50%25' y='56%25' dominant-baseline='middle' text-anchor='middle' font-family='Inter,sans-serif' font-size='30' fill='white'%3EEF%3C/text%3E%3C/svg%3E";
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const nameRegex = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]{2,}$/;
+const rucRegex = /^\d{11}$/;
 
 floatingImage.addEventListener("error", () => {
   floatingImage.src = placeholderAvatar;
 });
+
+function getUsers() {
+  const stored = localStorage.getItem(STORAGE_USERS);
+  if (stored) return JSON.parse(stored);
+  const seed = [
+    {
+      fullName: "Cliente Demo",
+      email: "cliente@earthfiber.pe",
+      password: "12345678",
+      role: "cliente",
+      profile: {},
+    },
+    {
+      fullName: "Artesano Demo",
+      email: "artesano@earthfiber.pe",
+      password: "12345678",
+      role: "artesano",
+      profile: {
+        displayName: "Artesano Demo · Cusco",
+        origin: "Cusco, Perú",
+        technique: "Tejido artesanal",
+        bio: "Perfil demo de vendedor Earth Fiber.",
+      },
+    },
+  ];
+  localStorage.setItem(STORAGE_USERS, JSON.stringify(seed));
+  return seed;
+}
+
+function saveUsers(users) {
+  localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
+}
+
+function setSession(user) {
+  authSession = { email: user.email, role: user.role, fullName: user.fullName };
+  localStorage.setItem(STORAGE_SESSION, JSON.stringify(authSession));
+  applySessionUI();
+}
+
+function clearSession() {
+  authSession = null;
+  localStorage.removeItem(STORAGE_SESSION);
+  applySessionUI();
+}
+
+function loadSession() {
+  const raw = localStorage.getItem(STORAGE_SESSION);
+  if (raw) authSession = JSON.parse(raw);
+  applySessionUI();
+}
+
+function applySessionUI() {
+  if (authSession) {
+    const roleLabel = authSession.role === "artesano" ? "Vendedor" : "Cliente";
+    sessionBadge.hidden = false;
+    sessionBadge.textContent = `Sesión activa: ${roleLabel}`;
+    openLoginModal.textContent = "Mi cuenta";
+    logoutBtn.hidden = false;
+    sellerRouteBtn.hidden = authSession.role !== "artesano";
+  } else {
+    sessionBadge.hidden = true;
+    sessionBadge.textContent = "";
+    openLoginModal.textContent = "Iniciar sesión";
+    logoutBtn.hidden = true;
+    sellerRouteBtn.hidden = true;
+  }
+}
+
+function setFeedback(el, message, type = "error") {
+  el.hidden = false;
+  el.textContent = message;
+  el.className = `form-feedback ${type}`;
+}
+
+function setLoginFeedback(message, type = "error") {
+  loginFeedback.hidden = false;
+  loginFeedback.textContent = message;
+  loginFeedback.className = `login-feedback ${type}`;
+}
 
 function renderMarketplace() {
   productGrid.innerHTML = productList
@@ -233,20 +249,15 @@ function setActiveNav(route) {
 }
 
 function bindVideoAutoplay() {
-  if (videoObserver) {
-    videoObserver.disconnect();
-  }
+  if (videoObserver) videoObserver.disconnect();
 
   const videos = document.querySelectorAll(".auto-video");
   videoObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.target instanceof HTMLVideoElement) {
-          if (entry.isIntersecting) {
-            entry.target.play().catch(() => null);
-          } else {
-            entry.target.pause();
-          }
+          if (entry.isIntersecting) entry.target.play().catch(() => null);
+          else entry.target.pause();
         }
       });
     },
@@ -264,11 +275,8 @@ function showView(route) {
 
   floatingArtisan.style.display = route === "product" ? "flex" : "none";
 
-  if (route === "product") {
-    bindVideoAutoplay();
-  } else if (videoObserver) {
-    videoObserver.disconnect();
-  }
+  if (route === "product") bindVideoAutoplay();
+  else if (videoObserver) videoObserver.disconnect();
 }
 
 function renderProduct(productId) {
@@ -314,7 +322,7 @@ function renderArtisanFromCurrentProduct() {
 
   const relatedProducts = productList.filter((item) => item.artisanProfile.name === artisan.name);
   const otherProducts = productList.filter((item) => item.artisanProfile.name !== artisan.name);
-  const carouselProducts = [...relatedProducts, ...otherProducts].slice(0, 8);
+  const carouselProducts = [...relatedProducts, ...otherProducts].slice(0, 10);
 
   artisanProducts.innerHTML = carouselProducts
     .map(
@@ -330,13 +338,14 @@ function renderArtisanFromCurrentProduct() {
 }
 
 function navigate(route) {
-  if (route === "product") {
-    renderProduct(currentProductId);
+  if (route === "seller" && (!authSession || authSession.role !== "artesano")) {
+    navigate("marketplace");
+    return;
   }
 
-  if (route === "artesano") {
-    renderArtisanFromCurrentProduct();
-  }
+  if (route === "product") renderProduct(currentProductId);
+  if (route === "artesano") renderArtisanFromCurrentProduct();
+  if (route === "seller") hydrateSellerForms();
 
   showView(route);
   location.hash = route;
@@ -363,58 +372,230 @@ function setAuthTab(mode) {
   loginFeedback.textContent = "";
 }
 
-openLoginModal.addEventListener("click", openModal);
+function validateEmail(value) {
+  return emailRegex.test(value);
+}
+
+function hydrateSellerForms() {
+  if (!authSession || authSession.role !== "artesano") return;
+  const user = getUsers().find((item) => item.email === authSession.email);
+  const profile = user?.profile || {};
+
+  document.getElementById("sellerProfileName").value = profile.displayName || user?.fullName || "";
+  document.getElementById("sellerProfileOrigin").value = profile.origin || "";
+  document.getElementById("sellerProfileTechnique").value = profile.technique || "";
+  document.getElementById("sellerProfileBio").value = profile.bio || "";
+}
+
+openLoginModal.addEventListener("click", () => {
+  if (!authSession) {
+    openModal();
+    return;
+  }
+  navigate(authSession.role === "artesano" ? "seller" : "marketplace");
+});
+
+logoutBtn.addEventListener("click", () => {
+  clearSession();
+  navigate("home");
+});
+
 closeLoginModal.addEventListener("click", closeModal);
 closeRegisterModal.addEventListener("click", closeModal);
 tabLogin.addEventListener("click", () => setAuthTab("login"));
 tabRegister.addEventListener("click", () => setAuthTab("register"));
+
 loginModal.addEventListener("click", (event) => {
-  if (event.target === loginModal) {
-    closeModal();
-  }
+  if (event.target === loginModal) closeModal();
 });
 
 submitLogin.addEventListener("click", () => {
   const role = loginRole.value;
-  const roleLabel = role === "artesano" ? "Vendedor" : "Cliente";
-  const email = document.getElementById("loginEmail").value.trim();
+  const email = document.getElementById("loginEmail").value.trim().toLowerCase();
   const password = document.getElementById("loginPassword").value.trim();
 
-  if (!email || !password) {
-    loginFeedback.hidden = false;
-    loginFeedback.textContent = "Completa correo y contraseña para continuar.";
-    loginFeedback.className = "login-feedback error";
+  if (!validateEmail(email)) {
+    setLoginFeedback("Ingresa un correo válido.");
     return;
   }
 
-  sessionBadge.hidden = false;
-  sessionBadge.textContent = `Sesión activa: ${roleLabel}`;
-  openLoginModal.textContent = "Mi cuenta";
+  if (password.length < 8) {
+    setLoginFeedback("La contraseña debe tener al menos 8 caracteres.");
+    return;
+  }
 
+  const user = getUsers().find((item) => item.email.toLowerCase() === email && item.role === role);
+  if (!user || user.password !== password) {
+    setLoginFeedback("Credenciales inválidas o cuenta no registrada para este rol.");
+    return;
+  }
+
+  setSession(user);
   closeModal();
-  navigate(role === "artesano" ? "artesano" : "marketplace");
+  navigate(role === "artesano" ? "seller" : "marketplace");
 });
 
 submitRegister.addEventListener("click", () => {
   const role = document.getElementById("registerRole").value;
-  const roleLabel = role === "artesano" ? "Vendedor" : "Cliente";
-  const name = document.getElementById("registerName").value.trim();
-  const email = document.getElementById("registerEmail").value.trim();
+  const fullName = document.getElementById("registerName").value.trim();
+  const email = document.getElementById("registerEmail").value.trim().toLowerCase();
   const password = document.getElementById("registerPassword").value.trim();
 
-  if (!name || !email || password.length < 8) {
-    loginFeedback.hidden = false;
-    loginFeedback.textContent = "Completa todos los campos y usa una contraseña de mínimo 8 caracteres.";
-    loginFeedback.className = "login-feedback error";
+  if (!nameRegex.test(fullName)) {
+    setLoginFeedback("Ingresa un nombre válido (solo letras y espacios).");
     return;
   }
 
-  sessionBadge.hidden = false;
-  sessionBadge.textContent = `Cuenta creada: ${roleLabel}`;
-  openLoginModal.textContent = "Mi cuenta";
+  if (!validateEmail(email)) {
+    setLoginFeedback("Ingresa un correo válido para crear cuenta.");
+    return;
+  }
+
+  if (password.length < 8) {
+    setLoginFeedback("La contraseña debe tener mínimo 8 caracteres.");
+    return;
+  }
+
+  const users = getUsers();
+  if (users.some((item) => item.email.toLowerCase() === email && item.role === role)) {
+    setLoginFeedback("Ya existe una cuenta con ese correo para este rol.");
+    return;
+  }
+
+  const newUser = {
+    fullName,
+    email,
+    password,
+    role,
+    profile: role === "artesano"
+      ? {
+          displayName: `${fullName} · Perú`,
+          origin: "Perú",
+          technique: "Tejido artesanal",
+          bio: "Nuevo perfil de artesano en Earth Fiber.",
+        }
+      : {},
+  };
+
+  users.push(newUser);
+  saveUsers(users);
+  setSession(newUser);
 
   closeModal();
-  navigate(role === "artesano" ? "artesano" : "marketplace");
+  navigate(role === "artesano" ? "seller" : "marketplace");
+});
+
+b2bForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const companyName = document.getElementById("companyName").value.trim();
+  const companyRuc = document.getElementById("companyRuc").value.trim();
+  const contactPerson = document.getElementById("contactPerson").value.trim();
+  const contactEmail = document.getElementById("contactEmail").value.trim();
+  const interestProduct = document.getElementById("interestProduct").value.trim();
+  const estimatedQty = Number(document.getElementById("estimatedQty").value);
+
+  if (companyName.length < 2) return setFeedback(b2bFeedback, "Ingresa un nombre de empresa válido.");
+  if (!rucRegex.test(companyRuc)) return setFeedback(b2bFeedback, "El RUC debe tener exactamente 11 dígitos.");
+  if (!nameRegex.test(contactPerson)) return setFeedback(b2bFeedback, "La persona de contacto debe contener solo letras y espacios.");
+  if (!validateEmail(contactEmail)) return setFeedback(b2bFeedback, "Ingresa un correo empresarial válido.");
+  if (interestProduct.length < 2) return setFeedback(b2bFeedback, "Detalla al menos un producto de interés.");
+  if (!Number.isFinite(estimatedQty) || estimatedQty < 1) return setFeedback(b2bFeedback, "La cantidad estimada debe ser mayor a 0.");
+
+  setFeedback(b2bFeedback, "Solicitud enviada correctamente. Te contactaremos pronto.", "success");
+  b2bForm.reset();
+});
+
+sellerProductForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  if (!authSession || authSession.role !== "artesano") {
+    setFeedback(sellerProductFeedback, "Debes iniciar sesión como artesano para publicar.");
+    return;
+  }
+
+  const name = document.getElementById("sellerProductName").value.trim();
+  const price = document.getElementById("sellerProductPrice").value.trim();
+  const category = document.getElementById("sellerProductCategory").value.trim();
+  const image = document.getElementById("sellerProductImage").value.trim();
+  const description = document.getElementById("sellerProductDescription").value.trim();
+
+  if (name.length < 3) return setFeedback(sellerProductFeedback, "El nombre del producto debe tener al menos 3 caracteres.");
+  if (!/^S\/\s?\d+/.test(price)) return setFeedback(sellerProductFeedback, "Usa formato de precio válido, por ejemplo: S/ 199.");
+  if (!category) return setFeedback(sellerProductFeedback, "Selecciona una categoría.");
+  if (!/^https?:\/\//i.test(image)) return setFeedback(sellerProductFeedback, "Ingresa una URL de imagen válida (http/https).");
+  if (description.length < 12) return setFeedback(sellerProductFeedback, "La descripción debe tener al menos 12 caracteres.");
+
+  const user = getUsers().find((item) => item.email === authSession.email);
+  const profile = user?.profile || {};
+
+  const newId = `seller-${Date.now()}`;
+  const newProduct = {
+    id: newId,
+    name,
+    category,
+    rating: "5.0",
+    price,
+    image,
+    description,
+    size: "Talla: Disponible",
+    stock: "Stock: 10 unidades",
+    artisan: `Artesano: ${authSession.fullName}`,
+    story: profile.bio || "Producto creado por artesano Earth Fiber.",
+    process: "Proceso artesanal publicado por el vendedor.",
+    storyVideo: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+    processVideo: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm",
+    artisanProfile: {
+      name: profile.displayName || `${authSession.fullName} · Perú`,
+      image: placeholderAvatar,
+      bio: profile.bio || "Perfil de artesano en Earth Fiber.",
+      experience: "Nuevo",
+      origin: profile.origin || "Perú",
+      technique: profile.technique || "Artesanía",
+      profileRating: "⭐ 5.0/5",
+      donationGoal: "Meta inicial de donación del artesano.",
+      donationCurrent: 0,
+      donationTarget: 100,
+    },
+  };
+
+  products[newId] = newProduct;
+  productList = Object.values(products);
+  renderMarketplace();
+  setFeedback(sellerProductFeedback, "Producto publicado correctamente y visible en el marketplace.", "success");
+  sellerProductForm.reset();
+});
+
+sellerProfileForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  if (!authSession || authSession.role !== "artesano") {
+    setFeedback(sellerProfileFeedback, "Debes iniciar sesión como artesano para editar perfil.");
+    return;
+  }
+
+  const displayName = document.getElementById("sellerProfileName").value.trim();
+  const origin = document.getElementById("sellerProfileOrigin").value.trim();
+  const technique = document.getElementById("sellerProfileTechnique").value.trim();
+  const bio = document.getElementById("sellerProfileBio").value.trim();
+
+  if (!nameRegex.test(displayName)) return setFeedback(sellerProfileFeedback, "Nombre de perfil inválido.");
+  if (origin.length < 2) return setFeedback(sellerProfileFeedback, "Ingresa un origen válido.");
+  if (technique.length < 3) return setFeedback(sellerProfileFeedback, "Ingresa una técnica principal válida.");
+  if (bio.length < 12) return setFeedback(sellerProfileFeedback, "La biografía debe tener al menos 12 caracteres.");
+
+  const users = getUsers();
+  const idx = users.findIndex((item) => item.email === authSession.email);
+  if (idx === -1) return setFeedback(sellerProfileFeedback, "No se encontró la cuenta del artesano.");
+
+  users[idx].fullName = displayName;
+  users[idx].profile = { displayName, origin, technique, bio };
+  saveUsers(users);
+  authSession.fullName = displayName;
+  localStorage.setItem(STORAGE_SESSION, JSON.stringify(authSession));
+
+  setFeedback(sellerProfileFeedback, "Perfil actualizado correctamente.", "success");
+  applySessionUI();
 });
 
 document.addEventListener("click", (event) => {
@@ -440,17 +621,20 @@ window.addEventListener("hashchange", () => {
   if (views[route]) {
     if (route === "product") renderProduct(currentProductId);
     if (route === "artesano") renderArtisanFromCurrentProduct();
+    if (route === "seller") hydrateSellerForms();
     showView(route);
   }
 });
 
 renderMarketplace();
 renderProduct(currentProductId);
+loadSession();
 
 const initialRoute = location.hash.replace("#", "") || "home";
 if (views[initialRoute]) {
   if (initialRoute === "product") renderProduct(currentProductId);
   if (initialRoute === "artesano") renderArtisanFromCurrentProduct();
+  if (initialRoute === "seller") hydrateSellerForms();
   showView(initialRoute);
 } else {
   showView("home");

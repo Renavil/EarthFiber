@@ -19,11 +19,13 @@
         <div class="nav-links">
           <button class="route-link" data-route="home">Inicio</button>
           <button class="route-link" data-route="marketplace">Marketplace</button>
+          <button class="route-link" id="sellerRouteBtn" data-route="seller" hidden>Panel vendedor</button>
           <button class="route-link" data-route="contacto">Contacto B2B</button>
         </div>
         <div class="nav-auth">
           <span id="sessionBadge" class="session-badge" hidden></span>
           <button class="btn btn-primary btn-login" id="openLoginModal">Iniciar sesión</button>
+          <button class="btn btn-outline" id="logoutBtn" hidden>Cerrar sesión</button>
         </div>
       </nav>
     </header>
@@ -190,16 +192,56 @@
             <h2>Formulario B2B / Empresas</h2>
             <p>Solicita compras al por mayor con datos formales.</p>
           </div>
-          <form class="contact-form">
-            <input type="text" placeholder="Nombre de empresa" />
-            <input type="text" placeholder="RUC" />
-            <input type="text" placeholder="Persona de contacto" />
-            <input type="email" placeholder="Correo" />
-            <input type="text" placeholder="Producto(s) de interés" />
-            <input type="number" placeholder="Cantidad estimada" />
-            <textarea rows="4" placeholder="Fecha requerida y detalles adicionales"></textarea>
-            <button class="btn btn-primary" type="button">Enviar solicitud comercial</button>
+          <form class="contact-form" id="b2bForm" novalidate>
+            <input id="companyName" type="text" placeholder="Nombre de empresa" />
+            <input id="companyRuc" type="text" placeholder="RUC (11 dígitos)" inputmode="numeric" maxlength="11" />
+            <input id="contactPerson" type="text" placeholder="Persona de contacto" />
+            <input id="contactEmail" type="email" placeholder="Correo" />
+            <input id="interestProduct" type="text" placeholder="Producto(s) de interés" />
+            <input id="estimatedQty" type="number" placeholder="Cantidad estimada" min="1" />
+            <textarea id="contactDetails" rows="4" placeholder="Fecha requerida y detalles adicionales"></textarea>
+            <button class="btn btn-primary" id="submitB2B" type="submit">Enviar solicitud comercial</button>
+            <p class="form-feedback" id="b2bFeedback" hidden></p>
           </form>
+        </section>
+      </section>
+
+      <section id="view-seller" class="view">
+        <section class="block">
+          <div class="section-head">
+            <h2>Panel de vendedor / artesano</h2>
+            <p>Publica productos y actualiza tu perfil artesanal.</p>
+          </div>
+
+          <div class="seller-grid">
+            <form class="panel" id="sellerProductForm" novalidate>
+              <h3>Publicar nuevo producto</h3>
+              <input id="sellerProductName" type="text" placeholder="Nombre del producto" />
+              <input id="sellerProductPrice" type="text" placeholder="Precio (ejemplo: S/ 199)" />
+              <select id="sellerProductCategory">
+                <option value="">Categoría</option>
+                <option>Blusa</option>
+                <option>Vestido</option>
+                <option>Bolso</option>
+                <option>Bufanda</option>
+                <option>Accesorio</option>
+              </select>
+              <input id="sellerProductImage" type="url" placeholder="URL de imagen" />
+              <textarea id="sellerProductDescription" rows="3" placeholder="Descripción del producto"></textarea>
+              <button class="btn btn-primary" type="submit">Publicar producto</button>
+              <p class="form-feedback" id="sellerProductFeedback" hidden></p>
+            </form>
+
+            <form class="panel" id="sellerProfileForm" novalidate>
+              <h3>Editar perfil de artesano</h3>
+              <input id="sellerProfileName" type="text" placeholder="Nombre visible" />
+              <input id="sellerProfileOrigin" type="text" placeholder="Origen (Ciudad, País)" />
+              <input id="sellerProfileTechnique" type="text" placeholder="Técnica principal" />
+              <textarea id="sellerProfileBio" rows="3" placeholder="Biografía / historia"></textarea>
+              <button class="btn btn-primary" type="submit">Guardar perfil</button>
+              <p class="form-feedback" id="sellerProfileFeedback" hidden></p>
+            </form>
+          </div>
         </section>
       </section>
     </main>
