@@ -21,6 +21,7 @@
           <button class="route-link" data-route="marketplace">Marketplace</button>
           <button class="route-link" id="sellerRouteBtn" data-route="seller" hidden>Panel vendedor</button>
           <button class="route-link" data-route="contacto">Contacto B2B</button>
+          <button class="route-link" data-route="cart">Carrito</button>
         </div>
         <div class="nav-auth">
           <span id="sessionBadge" class="session-badge" hidden></span>
@@ -73,24 +74,38 @@
             <aside class="filters">
               <h3>Filtros</h3>
               <label>Tipo de producto
-                <select>
-                  <option>Todos</option>
-                  <option>Blusas</option>
-                  <option>Vestidos</option>
-                  <option>Bolsos</option>
-                  <option>Bufandas</option>
+                <select id="filterType">
+                  <option value="">Todos</option>
+                  <option>Blusa</option><option>Vestido</option><option>Bolso</option><option>Bufanda</option>
+                  <option>Guantes</option><option>Polo</option><option>Falda</option><option>Casaca</option>
+                  <option>Pantalón</option><option>Camisa</option><option>Gorro</option><option>Pijama</option>
+                  <option>Short</option><option>Otro</option>
                 </select>
               </label>
-              <label>Rango de precio
-                <input type="range" min="30" max="600" value="220" />
-              </label>
-              <label>Color
-                <select>
-                  <option>Todos</option>
-                  <option>Tierra</option>
-                  <option>Marfil</option>
-                  <option>Negro</option>
+              <label>Género
+                <select id="filterGender">
+                  <option value="">Todos</option>
+                  <option>Femenino</option>
+                  <option>Masculino</option>
+                  <option>Unisex</option>
                 </select>
+              </label>
+              <label>Talla
+                <select id="filterSize">
+                  <option value="">Todas</option>
+                  <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option>
+                </select>
+              </label>
+              <label>Rango de precio (S/)
+                <div class="price-inputs">
+                  <input id="minPriceInput" type="number" min="0" step="1" placeholder="Mínimo" value="0" />
+                  <span>-</span>
+                  <input id="maxPriceInput" type="number" min="0" step="1" placeholder="Máximo" value="1000" />
+                </div>
+                <div class="double-range">
+                  <input id="minPriceRange" type="range" min="0" max="2000" value="0" />
+                  <input id="maxPriceRange" type="range" min="0" max="2000" value="1000" />
+                </div>
               </label>
             </aside>
 
@@ -117,8 +132,8 @@
                 <li id="detailArtisan"></li>
               </ul>
               <div class="hero-actions">
-                <button class="btn btn-primary">Comprar</button>
-                <button class="btn btn-outline">Agregar al carrito</button>
+                <button class="btn btn-primary" id="buyNowBtn">Comprar</button>
+                <button class="btn btn-outline" id="addToCartBtn">Agregar al carrito</button>
               </div>
             </div>
           </div>
@@ -149,9 +164,20 @@
               <video id="storyVideo" class="auto-video" controls muted loop playsinline preload="metadata"></video>
             </figure>
           </article>
+
+
+          <section class="panel chat-panel">
+            <h3>Chat cliente - vendedor</h3>
+            <div id="chatMessages" class="chat-messages"></div>
+            <form id="chatForm" class="reply-form">
+              <input id="chatSender" type="text" placeholder="Tu nombre" />
+              <textarea id="chatText" rows="2" placeholder="Escribe tu mensaje..."></textarea>
+              <button class="btn btn-primary" type="submit">Enviar mensaje</button>
+            </form>
+            <p class="form-feedback" id="chatFeedback" hidden></p>
+          </section>
         </section>
       </section>
-
       <section id="view-artesano" class="view">
         <section class="block">
           <div class="section-head">
@@ -234,6 +260,39 @@
         </section>
       </section>
 
+
+      <section id="view-cart" class="view">
+        <section class="block">
+          <div class="section-head"><h2>Carrito de compras</h2></div>
+          <div class="panel">
+            <div id="cartList"></div>
+            <p><strong>Total:</strong> <span id="cartTotal">S/ 0.00</span></p>
+          </div>
+
+          <div class="panel payment-panel">
+            <h3>Pago</h3>
+            <div class="payment-methods">
+              <label><input type="radio" name="payMethod" value="tarjeta" checked /> Tarjeta</label>
+              <label><input type="radio" name="payMethod" value="yape" /> Yape</label>
+            </div>
+            <div id="cardFields">
+              <input id="cardName" type="text" placeholder="Nombre en la tarjeta" />
+              <input id="cardNumber" type="text" placeholder="Número de tarjeta" />
+              <div class="price-inputs">
+                <input id="cardExp" type="text" placeholder="MM/AA" />
+                <input id="cardCvv" type="text" placeholder="CVV" />
+              </div>
+            </div>
+            <div id="yapeBox" hidden>
+              <p>Escanea este QR de Yape para pagar:</p>
+              <img alt="QR Yape" class="yape-qr" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=YAPE-EARTHFIBER-DEMO" />
+            </div>
+            <button class="btn btn-primary" id="checkoutBtn" type="button">Confirmar pago</button>
+            <p class="form-feedback" id="checkoutFeedback" hidden></p>
+          </div>
+        </section>
+      </section>
+
       <section id="view-seller" class="view">
         <section class="block">
           <div class="section-head">
@@ -249,15 +308,24 @@
               <input id="sellerProductPrice" type="number" min="1" step="1" inputmode="numeric" placeholder="Precio (solo número, ej: 199)" />
               <select id="sellerProductCategory">
                 <option value="">Categoría</option>
-                <option>Blusa</option>
-                <option>Vestido</option>
-                <option>Bolso</option>
-                <option>Bufanda</option>
-                <option>Accesorio</option>
+                <option>Blusa</option><option>Vestido</option><option>Bolso</option><option>Bufanda</option>
+                <option>Guantes</option><option>Polo</option><option>Falda</option><option>Casaca</option>
+                <option>Pantalón</option><option>Camisa</option><option>Gorro</option><option>Pijama</option>
+                <option>Short</option><option>Otro</option>
               </select>
               <input id="sellerProductImage" type="file" accept="image/*" />
+              <input id="sellerProductImagePath" type="text" placeholder="o ruta de imagen local: assets/productos/mi-imagen.jpg" />
               <img id="sellerImagePreview" class="seller-image-preview" alt="Vista previa del producto" hidden />
               <textarea id="sellerProductDescription" rows="3" placeholder="Descripción del producto"></textarea>
+              <input id="sellerProductSizes" type="text" placeholder="Tallas (opcional): XS, S, M..." />
+              <select id="sellerProductGender">
+                <option value="Unisex">Género: Unisex</option>
+                <option value="Femenino">Género: Femenino</option>
+                <option value="Masculino">Género: Masculino</option>
+              </select>
+              <label class="checkbox-label"><input id="sellerNoStock" type="checkbox" /> Sin stock</label>
+              <input id="sellerProductStock" type="number" min="0" step="1" value="10" placeholder="Stock" />
+              <small class="input-help">Imagen principal: coloca tu archivo en una carpeta del proyecto (por ejemplo `assets/productos/`) y selecciona ese archivo desde "Subir imagen".</small>
               <button class="btn btn-primary" type="submit" id="sellerProductSubmitBtn">Publicar producto</button>
               <p class="form-feedback" id="sellerProductFeedback" hidden></p>
             </form>
