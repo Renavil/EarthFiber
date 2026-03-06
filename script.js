@@ -172,6 +172,12 @@ sellerProductImage.addEventListener("change", async () => {
   sellerImagePreview.hidden = false;
 });
 
+const sellerProductPrice = document.getElementById("sellerProductPrice");
+sellerProductPrice.addEventListener("input", () => {
+  const formatted = parsePriceValue(sellerProductPrice.value);
+  sellerProductPrice.value = formatted || "";
+});
+
 function getUsers() {
   const raw = localStorage.getItem(STORAGE_USERS);
   if (raw) return JSON.parse(raw);
@@ -266,6 +272,12 @@ function setLoginFeedback(message, type = "error") {
 
 function validateEmail(value) {
   return emailRegex.test(value);
+}
+
+function parsePriceValue(rawValue) {
+  const digits = String(rawValue).replace(/[^\d]/g, "");
+  if (!digits) return null;
+  return `S/ ${Number(digits)}`;
 }
 
 function fileToDataUrl(file) {
@@ -671,14 +683,16 @@ sellerProductForm.addEventListener("submit", async (event) => {
   }
 
   const name = document.getElementById("sellerProductName").value.trim();
-  const price = document.getElementById("sellerProductPrice").value.trim();
+  const priceInput = document.getElementById("sellerProductPrice").value.trim();
   const category = document.getElementById("sellerProductCategory").value.trim();
   const description = document.getElementById("sellerProductDescription").value.trim();
   const file = sellerProductImage.files?.[0];
   const editingId = sellerEditingId.value;
 
+  const price = parsePriceValue(priceInput);
+
   if (name.length < 3) return setFeedback(sellerProductFeedback, "El nombre del producto debe tener al menos 3 caracteres.");
-  if (!/^S\/\s?\d+/.test(price)) return setFeedback(sellerProductFeedback, "Usa formato de precio válido, ejemplo: S/ 199.");
+  if (!price) return setFeedback(sellerProductFeedback, "Ingresa solo el número del precio. Ejemplo: 199.");
   if (!category) return setFeedback(sellerProductFeedback, "Selecciona una categoría.");
   if (description.length < 12) return setFeedback(sellerProductFeedback, "La descripción debe tener al menos 12 caracteres.");
   if (!editingId && !file) return setFeedback(sellerProductFeedback, "Sube una imagen del producto.");
