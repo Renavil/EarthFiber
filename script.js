@@ -172,12 +172,6 @@ sellerProductImage.addEventListener("change", async () => {
   sellerImagePreview.hidden = false;
 });
 
-const sellerProductPrice = document.getElementById("sellerProductPrice");
-sellerProductPrice.addEventListener("input", () => {
-  const formatted = parsePriceValue(sellerProductPrice.value);
-  sellerProductPrice.value = formatted || "";
-});
-
 function getUsers() {
   const raw = localStorage.getItem(STORAGE_USERS);
   if (raw) return JSON.parse(raw);
@@ -275,9 +269,11 @@ function validateEmail(value) {
 }
 
 function parsePriceValue(rawValue) {
-  const digits = String(rawValue).replace(/[^\d]/g, "");
+  const digits = String(rawValue ?? "").replace(/[^\d]/g, "");
   if (!digits) return null;
-  return `S/ ${Number(digits)}`;
+  const amount = Number(digits);
+  if (!Number.isFinite(amount) || amount <= 0) return null;
+  return `S/ ${amount}`;
 }
 
 function fileToDataUrl(file) {
@@ -488,7 +484,7 @@ function fillProductEditor(productId) {
   if (!product) return;
   sellerEditingId.value = product.id;
   document.getElementById("sellerProductName").value = product.name;
-  document.getElementById("sellerProductPrice").value = product.price;
+  document.getElementById("sellerProductPrice").value = String(product.price).replace(/[^\d]/g, "");
   document.getElementById("sellerProductCategory").value = product.category;
   document.getElementById("sellerProductDescription").value = product.description;
   sellerImagePreview.src = product.image;
@@ -692,7 +688,7 @@ sellerProductForm.addEventListener("submit", async (event) => {
   const price = parsePriceValue(priceInput);
 
   if (name.length < 3) return setFeedback(sellerProductFeedback, "El nombre del producto debe tener al menos 3 caracteres.");
-  if (!price) return setFeedback(sellerProductFeedback, "Ingresa solo el número del precio. Ejemplo: 199.");
+  if (!price) return setFeedback(sellerProductFeedback, "Ingresa un precio válido en números (ejemplo: 199).");
   if (!category) return setFeedback(sellerProductFeedback, "Selecciona una categoría.");
   if (description.length < 12) return setFeedback(sellerProductFeedback, "La descripción debe tener al menos 12 caracteres.");
   if (!editingId && !file) return setFeedback(sellerProductFeedback, "Sube una imagen del producto.");
