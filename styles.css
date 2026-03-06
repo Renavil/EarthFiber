@@ -430,6 +430,19 @@ textarea {
   border: 1px solid #dbcfc2;
 }
 
+.file-label {
+  font-size: 0.9rem;
+  color: #5f5348;
+}
+
+.seller-video-preview {
+  width: 100%;
+  max-height: 240px;
+  border-radius: 10px;
+  border: 1px solid #dbcfc2;
+  background: #111;
+}
+
 .seller-product-item .actions {
   margin-top: 0.6rem;
   display: flex;

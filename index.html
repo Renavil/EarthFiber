@@ -268,6 +268,9 @@
               <input id="sellerProfileOrigin" type="text" placeholder="Origen (Ciudad, País)" />
               <input id="sellerProfileTechnique" type="text" placeholder="Técnica principal" />
               <textarea id="sellerProfileBio" rows="3" placeholder="Biografía / historia"></textarea>
+              <label for="sellerStoryVideo" class="file-label">Video de historia del artesano (aplica a todos tus productos)</label>
+              <input id="sellerStoryVideo" type="file" accept="video/mp4,video/webm,video/ogg" />
+              <video id="sellerStoryVideoPreview" class="seller-video-preview" controls preload="metadata" hidden></video>
               <button class="btn btn-primary" type="submit">Guardar perfil</button>
               <p class="form-feedback" id="sellerProfileFeedback" hidden></p>
             </form>

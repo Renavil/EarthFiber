@@ -163,6 +163,8 @@ const sellerProfileForm = document.getElementById("sellerProfileForm");
 const sellerProductsList = document.getElementById("sellerProductsList");
 const sellerProductFeedback = document.getElementById("sellerProductFeedback");
 const sellerProfileFeedback = document.getElementById("sellerProfileFeedback");
+const sellerStoryVideo = document.getElementById("sellerStoryVideo");
+const sellerStoryVideoPreview = document.getElementById("sellerStoryVideoPreview");
 const sellerEditingId = document.getElementById("sellerEditingId");
 const sellerProductImage = document.getElementById("sellerProductImage");
 const sellerImagePreview = document.getElementById("sellerImagePreview");
@@ -181,6 +183,27 @@ sellerProductImage.addEventListener("change", async () => {
   sellerImagePreview.src = await fileToDataUrl(file);
   sellerImagePreview.hidden = false;
 });
+
+sellerStoryVideo.addEventListener("change", async () => {
+  const file = sellerStoryVideo.files?.[0];
+  if (!file) {
+    const currentProfileVideo = getUsers().find((u) => u.email === authSession?.email)?.profile?.storyVideo || "";
+    sellerStoryVideoPreview.src = currentProfileVideo;
+    sellerStoryVideoPreview.hidden = !currentProfileVideo;
+    return;
+  }
+
+  if (file.size > 20 * 1024 * 1024) {
+    setFeedback(sellerProfileFeedback, "El video debe pesar máximo 20MB para mantener buen rendimiento.");
+    sellerStoryVideo.value = "";
+    return;
+  }
+
+  const dataUrl = await fileToDataUrlRaw(file);
+  sellerStoryVideoPreview.src = dataUrl;
+  sellerStoryVideoPreview.hidden = false;
+});
+
 
 function getUsers() {
   const raw = localStorage.getItem(STORAGE_USERS);
@@ -328,6 +351,16 @@ function compressImageDataUrl(dataUrl, maxWidth = 1280, quality = 0.78) {
     };
     img.onerror = () => resolve(dataUrl);
     img.src = dataUrl;
+  });
+}
+
+
+function fileToDataUrlRaw(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
   });
 }
 
@@ -534,6 +567,15 @@ function hydrateSellerForms() {
   document.getElementById("sellerProfileOrigin").value = profile.origin || "";
   document.getElementById("sellerProfileTechnique").value = profile.technique || "";
   document.getElementById("sellerProfileBio").value = profile.bio || "";
+
+  const profileStoryVideo = profile.storyVideo || "";
+  if (profileStoryVideo) {
+    sellerStoryVideoPreview.src = profileStoryVideo;
+    sellerStoryVideoPreview.hidden = false;
+  } else {
+    sellerStoryVideoPreview.hidden = true;
+    sellerStoryVideoPreview.src = "";
+  }
 }
 
 function resetProductEditor() {
@@ -872,7 +914,7 @@ sellerProductForm.addEventListener("submit", async (event) => {
     artisan: `Artesano: ${authSession.fullName}`,
     story: profile.bio || "Producto creado por artesano Earth Fiber.",
     process: "Proceso artesanal publicado por el vendedor.",
-    storyVideo: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+    storyVideo: profile.storyVideo || "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
     processVideo: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm",
     artisanProfile: {
       name: profile.displayName || `${authSession.fullName} · Perú`,
@@ -895,7 +937,7 @@ sellerProductForm.addEventListener("submit", async (event) => {
   setFeedback(sellerProductFeedback, editingId ? "Producto actualizado correctamente." : "Producto publicado correctamente.", "success");
 });
 
-sellerProfileForm.addEventListener("submit", (event) => {
+sellerProfileForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   if (!authSession || authSession.role !== "artesano") {
@@ -906,8 +948,9 @@ sellerProfileForm.addEventListener("submit", (event) => {
   const origin = document.getElementById("sellerProfileOrigin").value.trim();
   const technique = document.getElementById("sellerProfileTechnique").value.trim();
   const bio = document.getElementById("sellerProfileBio").value.trim();
+  const storyVideoFile = sellerStoryVideo.files?.[0];
 
-  if (!nameRegex.test(displayName)) return setFeedback(sellerProfileFeedback, "Nombre de perfil inválido.");
+  if (displayName.length < 2) return setFeedback(sellerProfileFeedback, "Nombre de perfil inválido.");
   if (origin.length < 2) return setFeedback(sellerProfileFeedback, "Ingresa un origen válido.");
   if (technique.length < 3) return setFeedback(sellerProfileFeedback, "Ingresa una técnica principal válida.");
   if (bio.length < 12) return setFeedback(sellerProfileFeedback, "La biografía debe tener al menos 12 caracteres.");
@@ -916,8 +959,16 @@ sellerProfileForm.addEventListener("submit", (event) => {
   const idx = users.findIndex((u) => u.email === authSession.email);
   if (idx === -1) return setFeedback(sellerProfileFeedback, "No se encontró la cuenta del artesano.");
 
+  let storyVideo = users[idx].profile?.storyVideo || "";
+  if (storyVideoFile) {
+    if (storyVideoFile.size > 20 * 1024 * 1024) {
+      return setFeedback(sellerProfileFeedback, "El video debe pesar máximo 20MB para mantener buen rendimiento.");
+    }
+    storyVideo = await fileToDataUrlRaw(storyVideoFile);
+  }
+
   users[idx].fullName = displayName;
-  users[idx].profile = { displayName, origin, technique, bio };
+  users[idx].profile = { displayName, origin, technique, bio, storyVideo };
   saveUsers(users);
 
   authSession.fullName = displayName;
@@ -933,11 +984,19 @@ sellerProfileForm.addEventListener("submit", (event) => {
         technique,
         bio,
       };
+      if (storyVideo) {
+        p.storyVideo = storyVideo;
+      }
     }
   });
   persistCustomProducts();
   renderMarketplace();
   renderSellerProducts();
+  if (storyVideo) {
+    sellerStoryVideoPreview.src = storyVideo;
+    sellerStoryVideoPreview.hidden = false;
+  }
+
   setFeedback(sellerProfileFeedback, "Perfil actualizado correctamente.", "success");
   applySessionUI();
 });
