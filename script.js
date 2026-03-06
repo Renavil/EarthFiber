@@ -11,6 +11,7 @@ const views = {
   artesano: document.getElementById("view-artesano"),
   contacto: document.getElementById("view-contacto"),
   cart: document.getElementById("view-cart"),
+  nosotros: document.getElementById("view-nosotros"),
   seller: document.getElementById("view-seller"),
 };
 
