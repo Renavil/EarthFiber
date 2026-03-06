@@ -496,10 +496,27 @@ function renderSellerProducts() {
         <small>${item.description}</small>
         <div class="actions">
           <button class="btn btn-outline edit-product-btn" data-product-id="${item.id}" type="button">Editar</button>
+          <button class="btn btn-outline delete-product-btn" data-product-id="${item.id}" type="button">Retirar</button>
         </div>
       </article>`
     )
     .join("");
+}
+
+function deleteSellerProduct(productId) {
+  const product = products[productId];
+  if (!product || product.ownerEmail !== authSession?.email) return;
+
+  delete products[productId];
+  persistCustomProducts();
+  renderMarketplace();
+  renderSellerProducts();
+
+  if (sellerEditingId.value === productId) {
+    resetProductEditor();
+  }
+
+  setFeedback(sellerProductFeedback, "Producto retirado correctamente.", "success");
 }
 
 function fillProductEditor(productId) {
@@ -830,6 +847,12 @@ document.addEventListener("click", (event) => {
   const editButton = event.target.closest(".edit-product-btn");
   if (editButton?.dataset.productId) {
     fillProductEditor(editButton.dataset.productId);
+    return;
+  }
+
+  const deleteButton = event.target.closest(".delete-product-btn");
+  if (deleteButton?.dataset.productId) {
+    deleteSellerProduct(deleteButton.dataset.productId);
     return;
   }
 
