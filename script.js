@@ -276,12 +276,38 @@ function parsePriceValue(rawValue) {
   return `S/ ${amount}`;
 }
 
-function fileToDataUrl(file) {
-  return new Promise((resolve, reject) => {
+async function fileToDataUrl(file) {
+  const rawDataUrl = await new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(String(reader.result));
     reader.onerror = reject;
     reader.readAsDataURL(file);
+  });
+
+  // Reduce very large uploads to avoid UI freezes/localStorage bloat in demo mode.
+  const compressed = await compressImageDataUrl(rawDataUrl, 1280, 0.78);
+  return compressed || rawDataUrl;
+}
+
+function compressImageDataUrl(dataUrl, maxWidth = 1280, quality = 0.78) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const scale = Math.min(1, maxWidth / img.width);
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round(img.width * scale));
+        canvas.height = Math.max(1, Math.round(img.height * scale));
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return resolve(dataUrl);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      } catch {
+        resolve(dataUrl);
+      }
+    };
+    img.onerror = () => resolve(dataUrl);
+    img.src = dataUrl;
   });
 }
 
@@ -691,9 +717,13 @@ sellerProductForm.addEventListener("submit", async (event) => {
   if (!price) return setFeedback(sellerProductFeedback, "Ingresa un precio válido en números (ejemplo: 199).");
   if (!category) return setFeedback(sellerProductFeedback, "Selecciona una categoría.");
   if (description.length < 12) return setFeedback(sellerProductFeedback, "La descripción debe tener al menos 12 caracteres.");
-  if (!editingId && !file) return setFeedback(sellerProductFeedback, "Sube una imagen del producto.");
 
-  let image = editingId ? products[editingId]?.image : placeholderAvatar;
+  const previewImage = sellerImagePreview.hidden ? "" : sellerImagePreview.src;
+  if (!editingId && !file && !previewImage) {
+    return setFeedback(sellerProductFeedback, "Sube una imagen del producto.");
+  }
+
+  let image = editingId ? products[editingId]?.image : (previewImage || placeholderAvatar);
   if (file) {
     image = await fileToDataUrl(file);
   }
