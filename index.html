@@ -189,20 +189,40 @@
       <section id="view-contacto" class="view">
         <section class="block">
           <div class="section-head">
-            <h2>Formulario B2B / Empresas</h2>
-            <p>Solicita compras al por mayor con datos formales.</p>
+            <h2>Contacto B2B / Empresas</h2>
+            <p>Empresas envían solicitudes; artesanos las reciben en su bandeja.</p>
           </div>
-          <form class="contact-form" id="b2bForm" novalidate>
-            <input id="companyName" type="text" placeholder="Nombre de empresa" />
-            <input id="companyRuc" type="text" placeholder="RUC (11 dígitos)" inputmode="numeric" maxlength="11" />
-            <input id="contactPerson" type="text" placeholder="Persona de contacto" />
-            <input id="contactEmail" type="email" placeholder="Correo" />
-            <input id="interestProduct" type="text" placeholder="Producto(s) de interés" />
-            <input id="estimatedQty" type="number" placeholder="Cantidad estimada" min="1" />
-            <textarea id="contactDetails" rows="4" placeholder="Fecha requerida y detalles adicionales"></textarea>
-            <button class="btn btn-primary" id="submitB2B" type="submit">Enviar solicitud comercial</button>
-            <p class="form-feedback" id="b2bFeedback" hidden></p>
-          </form>
+
+          <div id="companyContactSection">
+            <form class="contact-form" id="b2bForm" novalidate>
+              <input id="companyName" type="text" placeholder="Nombre de empresa" />
+              <input id="companyRuc" type="text" placeholder="RUC (11 dígitos)" inputmode="numeric" maxlength="11" />
+              <input id="contactPerson" type="text" placeholder="Persona de contacto" />
+              <input id="contactEmail" type="email" placeholder="Correo" />
+              <input id="interestProduct" type="text" placeholder="Producto(s) de interés" />
+              <input id="estimatedQty" type="number" placeholder="Cantidad estimada" min="1" />
+              <textarea id="contactDetails" rows="4" placeholder="Fecha requerida y detalles adicionales"></textarea>
+              <button class="btn btn-primary" id="submitB2B" type="submit">Enviar solicitud comercial</button>
+              <p class="form-feedback" id="b2bFeedback" hidden></p>
+            </form>
+          </div>
+
+          <div id="sellerInboxSection" hidden>
+            <article class="panel">
+              <h3>Bandeja de solicitudes empresariales</h3>
+              <p>Aquí ves los formularios enviados por empresas y puedes responder.</p>
+              <div id="sellerInboxList" class="inbox-list"></div>
+            </article>
+            <article class="panel" id="inboxChatPanel" hidden>
+              <h3 id="chatTitle">Chat con empresa</h3>
+              <div id="inboxChatMessages" class="chat-messages"></div>
+              <form id="sellerReplyForm" class="reply-form">
+                <textarea id="sellerReplyText" rows="3" placeholder="Escribe una respuesta para la empresa..."></textarea>
+                <button class="btn btn-primary" type="submit">Enviar respuesta</button>
+              </form>
+              <p class="form-feedback" id="sellerReplyFeedback" hidden></p>
+            </article>
+          </div>
         </section>
       </section>
 
@@ -215,7 +235,8 @@
 
           <div class="seller-grid">
             <form class="panel" id="sellerProductForm" novalidate>
-              <h3>Publicar nuevo producto</h3>
+              <h3>Publicar / editar producto</h3>
+              <input id="sellerEditingId" type="hidden" />
               <input id="sellerProductName" type="text" placeholder="Nombre del producto" />
               <input id="sellerProductPrice" type="text" placeholder="Precio (ejemplo: S/ 199)" />
               <select id="sellerProductCategory">
@@ -226,9 +247,10 @@
                 <option>Bufanda</option>
                 <option>Accesorio</option>
               </select>
-              <input id="sellerProductImage" type="url" placeholder="URL de imagen" />
+              <input id="sellerProductImage" type="file" accept="image/*" />
+              <img id="sellerImagePreview" class="seller-image-preview" alt="Vista previa del producto" hidden />
               <textarea id="sellerProductDescription" rows="3" placeholder="Descripción del producto"></textarea>
-              <button class="btn btn-primary" type="submit">Publicar producto</button>
+              <button class="btn btn-primary" type="submit" id="sellerProductSubmitBtn">Publicar producto</button>
               <p class="form-feedback" id="sellerProductFeedback" hidden></p>
             </form>
 
@@ -241,6 +263,12 @@
               <button class="btn btn-primary" type="submit">Guardar perfil</button>
               <p class="form-feedback" id="sellerProfileFeedback" hidden></p>
             </form>
+
+            <article class="panel">
+              <h3>Mis productos publicados</h3>
+              <p>Revisa y edita los productos que ya has publicado.</p>
+              <div id="sellerProductsList" class="seller-products-list"></div>
+            </article>
           </div>
         </section>
       </section>
