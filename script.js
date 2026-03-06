@@ -201,6 +201,12 @@ const submitRegister = document.getElementById("submitRegister");
 let currentProductId = "qori";
 let videoObserver;
 
+const placeholderAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='100%25' height='100%25' fill='%238a5a3b'/%3E%3Ctext x='50%25' y='56%25' dominant-baseline='middle' text-anchor='middle' font-family='Inter,sans-serif' font-size='30' fill='white'%3EEF%3C/text%3E%3C/svg%3E";
+
+floatingImage.addEventListener("error", () => {
+  floatingImage.src = placeholderAvatar;
+});
+
 function renderMarketplace() {
   productGrid.innerHTML = productList
     .map(
@@ -285,7 +291,7 @@ function renderProduct(productId) {
   document.getElementById("processVideo").src = product.processVideo;
 
   floatingText.textContent = `Ver perfil de ${product.artisanProfile.name.split("·")[0].trim()}`;
-  floatingImage.src = product.artisanProfile.image;
+  floatingImage.src = product.artisanProfile.image || placeholderAvatar;
 }
 
 function renderArtisanFromCurrentProduct() {
@@ -307,9 +313,10 @@ function renderArtisanFromCurrentProduct() {
   document.getElementById("progressBar").style.width = `${width}%`;
 
   const relatedProducts = productList.filter((item) => item.artisanProfile.name === artisan.name);
-  const fallbackProducts = relatedProducts.length ? relatedProducts : [product, ...productList.filter((item) => item.id !== product.id).slice(0, 3)];
+  const otherProducts = productList.filter((item) => item.artisanProfile.name !== artisan.name);
+  const carouselProducts = [...relatedProducts, ...otherProducts].slice(0, 8);
 
-  artisanProducts.innerHTML = fallbackProducts
+  artisanProducts.innerHTML = carouselProducts
     .map(
       (item) => `
       <article class="mini-card" data-product-id="${item.id}">
