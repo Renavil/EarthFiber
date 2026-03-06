@@ -385,10 +385,7 @@ function renderProduct(productId) {
   document.getElementById("detailSize").textContent = product.size;
   document.getElementById("detailStock").textContent = product.stock;
   document.getElementById("detailArtisan").textContent = product.artisan;
-  document.getElementById("storyText").textContent = product.story;
-  document.getElementById("processText").textContent = product.process;
   document.getElementById("storyVideo").src = product.storyVideo;
-  document.getElementById("processVideo").src = product.processVideo;
 
   floatingText.textContent = `Ver perfil de ${product.artisanProfile.name.split("·")[0].trim()}`;
   floatingImage.src = product.artisanProfile.image || placeholderAvatar;
